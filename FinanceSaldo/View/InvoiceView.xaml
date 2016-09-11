@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="FinanceSaldo.View.InvoiceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" d:DesignWidth="743.881" d:DesignHeight="348.358">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="Wrap"
+                   TextAlignment="Center" Text="List of All Invoices" FontWeight="Bold" FontSize="20"/>
+        <DataGrid x:Name="dgInvoice" Grid.Row="1" ItemsSource="{Binding Invoice}"/>
+        <Button x:Name="btnloadinovice" Content="List All Invoices" 
+                Grid.Row="2"/>
+    </Grid>
+</UserControl>
