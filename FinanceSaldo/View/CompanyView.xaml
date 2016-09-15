@@ -9,9 +9,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap"
                    TextAlignment="Center" Text="List of Companies" FontWeight="Bold" FontSize="16"/>
@@ -20,7 +19,5 @@
                 <DataGridTextColumn Header="Предприятие" Binding="{Binding Name}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="btnloadinovice" Content="New company" 
-                Grid.Row="2"/>
     </Grid>
 </UserControl>

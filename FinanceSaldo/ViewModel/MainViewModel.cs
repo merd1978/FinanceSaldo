@@ -1,15 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.Command;
 
 namespace FinanceSaldo.ViewModel
 {
-    /// <summary>
     /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// See http://www.mvvmlight.net
-    /// </para>
-    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
@@ -35,6 +31,14 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _welcomeTitle, value);
             }
+        }
+
+        public ViewModelBase CurrentView { get; set; }      //manage current view
+        public RelayCommand CompanyEditCommand { get; set; }
+
+        private void ExecuteCompanyEditCommand()
+        {
+
         }
 
         ObservableCollection<Company> _Company;
@@ -87,6 +91,8 @@ namespace FinanceSaldo.ViewModel
 
                     Invoice = items;
                 });
+
+            CompanyEditCommand = new RelayCommand(ExecuteCompanyEditCommand);
         }
 
         ////public override void Cleanup()

@@ -22,7 +22,9 @@
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"> </RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"> </RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -34,9 +36,16 @@
             <MenuItem Header="_TOOLS"/>
             <MenuItem Header="_HELP"/>
         </Menu>
-        <view:CompanyView  Grid.Row="1" Grid.Column="0" Margin="5,5,5,0"/>
-        <view:InvoiceView  Grid.Row="1" Grid.Column="1" Margin="5,5,5,0"/>
-    
+        <ToolBar Grid.Row="1" Grid.ColumnSpan="2">
+            <Button>
+                <Image Source="image\plus-icon-0.png" MaxHeight="32"></Image>
+            </Button>
+        </ToolBar>
+        <view:CompanyView  Grid.Row="2" Grid.Column="0" Margin="5,5,5,0"/>
+        <view:InvoiceView  Grid.Row="2" Grid.Column="1" Margin="5,5,5,0"/>
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="2">
+            <TextBlock>Status bar</TextBlock>
+        </StatusBar>
 
         <!--<TextBlock FontSize="36"
                    FontWeight="Bold"
