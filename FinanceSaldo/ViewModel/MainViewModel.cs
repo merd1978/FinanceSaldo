@@ -30,23 +30,23 @@ namespace FinanceSaldo.ViewModel
         }
 
         #region Commands
-        public RelayCommand CompanyEditCommand { get; set; }
-        private void ExecuteCompanyEditCommand()
+        public RelayCommand EditCompanyCommand { get; set; }
+        private void ExecuteEditCompanyCommand()
         {
             //CurrentView = View.CompanyView;
         }
 
-        public RelayCommand CompanyNewCommand { get; set; }
-        private void ExecuteCompanyNewCommand()
+        public RelayCommand NewCompanyCommand { get; set; }
+        private void ExecuteNewCompanyCommand()
         {
-            TabCollection.Add(new CompanyEditViewModel("New"));
+            TabCollection.Add(new CompanyEditViewModel("New", _dataService));
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
-        public RelayCommand<int> CloseTabCommand { get; set; }
-        private void ExecuteCloseTabCommand(int index)
+        public RelayCommand<ViewModelBase> CloseTabCommand { get; set; }
+        private void ExecuteCloseTabCommand(ViewModelBase index)
         {
-            TabCollection.RemoveAt(index);
+            TabCollection.Remove(index);
         }
         #endregion
 
@@ -103,9 +103,9 @@ namespace FinanceSaldo.ViewModel
                     Invoice = items;
                 });
 
-            CompanyEditCommand = new RelayCommand(ExecuteCompanyEditCommand);
-            CompanyNewCommand = new RelayCommand(ExecuteCompanyNewCommand);
-            CloseTabCommand = new RelayCommand<int>(ExecuteCloseTabCommand);
+            EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
+            NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
+            CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
 
             TabCollection.Add(new InvoiceViewModel("Tab1"));
             TabCollection.Add(new InvoiceViewModel("Tab2"));

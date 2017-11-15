@@ -21,6 +21,11 @@ namespace FinanceSaldo.Design
             }
             callback(DesignCompany, null);
         }
+
+        public void CreateCompany(Company company)
+        {
+        }
+
         public void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback)
         {
             var DesignInvoice = new ObservableCollection<Invoice>();

@@ -39,7 +39,7 @@
             <MenuItem Header="_HELP"/>
         </Menu>
         <ToolBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button Command="{Binding CompanyNewCommand}">
+            <Button Command="{Binding NewCompanyCommand}">
                 <Image Source="image\plus-icon-0.png" MaxHeight="24"></Image>
             </Button>
         </ToolBar>
@@ -52,16 +52,16 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding TabName}"/>
                         <Button Content="X" Cursor="Hand" DockPanel.Dock="Right" Focusable="False"
-                                FontFamily="Courier" FontSize="9" FontWeight="Bold"  Margin="0,1,0,0" Padding="0" 
+                                FontFamily="Courier" FontSize="9" FontWeight="Bold"  Margin="5,0,0,0" Padding="0" Background="Transparent"
                                 VerticalContentAlignment="Bottom" Width="16" Height="16"
-                                Command="{Binding CloseTabCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Name}"/>
+                                Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding ElementName=TabMain, Path=SelectedItem}"/>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type viewModel:InvoiceViewModel}">
-                    <view:InvoiceView />
+                    <view:InvoiceView/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModel:CompanyEditViewModel}">
                     <view:CompanyEditView />

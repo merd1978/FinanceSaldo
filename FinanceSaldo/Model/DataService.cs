@@ -5,7 +5,7 @@ namespace FinanceSaldo.Model
 {
     public class DataService : IDataService
     {
-        DataEntity context;
+        readonly DataEntity context;
         public DataService()
         {
             context = new DataEntity();
@@ -16,10 +16,16 @@ namespace FinanceSaldo.Model
             var _company = context.Company;
             callback(new ObservableCollection<Company>(_company), null);
         }
+        public void CreateCompany(Company company)
+        {
+            context.Company.Add(company);
+            context.SaveChangesAsync();
+        }
         public void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback)
         {
             var _invoice = context.Invoice;
             callback(new ObservableCollection<Invoice>(_invoice), null);
         }
+
     }
 }

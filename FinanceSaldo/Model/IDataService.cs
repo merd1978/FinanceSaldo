@@ -10,5 +10,6 @@ namespace FinanceSaldo.Model
     {
         void GetCompany(Action<ObservableCollection<Company>, Exception> callback);
         void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback);
+        void CreateCompany(Company company);
     }
 }
