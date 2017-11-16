@@ -1,6 +1,7 @@
 ﻿using FinanceSaldo.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace FinanceSaldo.ViewModel
 {
@@ -25,6 +26,13 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteCreateCompanyCommand()
         {
             _dataService.CreateCompany(_company);
+            Messenger.Default.Send(new NotificationMessage("RefreshCompany"));
+        }
+
+        public RelayCommand CloseTabCommand { get; set; }
+        private void ExecuteCloseTabCommand()
+        {
+            Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
         public CompanyEditViewModel(string tabName, IDataService dataService)
@@ -32,6 +40,7 @@ namespace FinanceSaldo.ViewModel
             TabName = tabName;
             _dataService = dataService;
             CreateCompanyCommand = new RelayCommand(ExecuteCreateCompanyCommand);
+            CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
         }
 
     }

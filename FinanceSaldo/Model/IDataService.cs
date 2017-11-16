@@ -9,7 +9,9 @@ namespace FinanceSaldo.Model
     public interface IDataService
     {
         void GetCompany(Action<ObservableCollection<Company>, Exception> callback);
-        void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback);
         void CreateCompany(Company company);
+        void RemoveCompany(Company company);
+
+        void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback);
     }
 }

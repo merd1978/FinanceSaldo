@@ -10,11 +10,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock TextWrapping="Wrap"
-                   TextAlignment="Center" Text="List of Companies" FontWeight="Bold" FontSize="16"/>
-        <DataGrid x:Name="dgCompany" Grid.Row="1" ItemsSource="{Binding Company}" AutoGenerateColumns="False">
+        <ToolBar Grid.Row="0" Grid.Column="0">
+            <Button Command="{Binding NewCompanyCommand}" ToolTip="Добавить Организацию">
+                <Image Source="../Image/plus-icon-0.png" MaxHeight="16"></Image>
+            </Button>
+            <Button Command="{Binding RemoveCompanyCommand}" ToolTip="Удалить Организацию">
+                <Image Source="../Image/red-minus.png" MaxHeight="16"></Image>
+            </Button>
+        </ToolBar>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap"
+                   TextAlignment="Center" Text="Список Организаций" FontWeight="Bold" FontSize="16"/>
+        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedCompany}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Предприятие" Binding="{Binding Name}"/>
             </DataGrid.Columns>

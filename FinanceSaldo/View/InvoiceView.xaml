@@ -13,7 +13,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap"
-                   TextAlignment="Center" Text="List of All Invoices" FontWeight="Bold" FontSize="16"/>
-        <DataGrid x:Name="dgInvoice" Grid.Row="1" ItemsSource="{Binding Invoice}"/>
+                   TextAlignment="Center" Text="Список накладных" FontWeight="Bold" FontSize="16"/>
+        <DataGrid x:Name="DgInvoice" Grid.Row="1" ItemsSource="{Binding Invoice}"/>
     </Grid>
 </UserControl>

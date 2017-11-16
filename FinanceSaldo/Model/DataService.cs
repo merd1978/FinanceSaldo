@@ -19,8 +19,14 @@ namespace FinanceSaldo.Model
         public void CreateCompany(Company company)
         {
             context.Company.Add(company);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
+        public void RemoveCompany(Company company)
+        {
+            context.Company.Remove(company);
+            context.SaveChanges();
+        }
+
         public void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback)
         {
             var _invoice = context.Invoice;

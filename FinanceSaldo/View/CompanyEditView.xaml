@@ -34,7 +34,8 @@
             <StackPanel Margin="0 10 0 10" HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button Content="Сохранить" Margin="10 0 10 0" MinWidth="50" 
                             Command="{Binding CreateCompanyCommand}"/>
-                    <Button Content="Отмена" Margin="10 0 10 0"></Button>
+                    <Button Content="Отмена" Margin="10 0 10 0"
+                            Command="{Binding CloseTabCommand}"/>
             </StackPanel>
         </StackPanel>
 

@@ -38,11 +38,6 @@
             <MenuItem Header="_TOOLS"/>
             <MenuItem Header="_HELP"/>
         </Menu>
-        <ToolBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button Command="{Binding NewCompanyCommand}">
-                <Image Source="image\plus-icon-0.png" MaxHeight="24"></Image>
-            </Button>
-        </ToolBar>
         <view:CompanyView Grid.Row="2" Grid.Column="0" Margin="5,5,5,0"/>
         <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0"
                     ItemsSource="{Binding TabCollection}" SelectedIndex="{Binding SelectedTabIndex}">

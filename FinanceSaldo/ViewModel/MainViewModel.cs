@@ -1,8 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace FinanceSaldo.ViewModel
 {
@@ -43,10 +43,20 @@ namespace FinanceSaldo.ViewModel
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
-        public RelayCommand<ViewModelBase> CloseTabCommand { get; set; }
-        private void ExecuteCloseTabCommand(ViewModelBase index)
+        public RelayCommand RemoveCompanyCommand { get; set; }
+        private void ExecuteRemoveCompanyCommand()
         {
-            TabCollection.Remove(index);
+            if (SelectedCompany != null)
+            {
+                _dataService.RemoveCompany(SelectedCompany);
+                GetCompany();
+            }
+        }
+
+        public RelayCommand<ViewModelBase> CloseTabCommand { get; set; }
+        private void ExecuteCloseTabCommand(ViewModelBase viewModel)
+        {
+            TabCollection.Remove(viewModel);
         }
         #endregion
 
@@ -65,6 +75,13 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _selectedTabIndex, value);
         }
 
+        private Company _selectedCompany;
+        public Company SelectedCompany
+        {
+            get => _selectedCompany;
+            set => Set(ref _selectedCompany, value);
+        }
+
         ObservableCollection<Invoice> _invoice;
         public ObservableCollection<Invoice> Invoice
         {
@@ -78,18 +95,7 @@ namespace FinanceSaldo.ViewModel
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
-            Company = new ObservableCollection<Company>();
-            _dataService.GetCompany(
-                (items, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
-
-                    Company = items;
-                });
+            GetCompany();
             Invoice = new ObservableCollection<Invoice>();
             _dataService.GetInvoice(
                 (items, error) =>
@@ -105,10 +111,43 @@ namespace FinanceSaldo.ViewModel
 
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
+            RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
 
             TabCollection.Add(new InvoiceViewModel("Tab1"));
             TabCollection.Add(new InvoiceViewModel("Tab2"));
+
+            Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
+        }
+
+        public void NotifyMe(NotificationMessage notificationMessage)
+        {
+            string notification = notificationMessage.Notification;
+            switch (notification)
+            {
+                case "RefreshCompany":
+                    GetCompany();
+                    break;
+                case "CloseCurrentTab":
+                    ExecuteCloseTabCommand(TabCollection[SelectedTabIndex]);
+                    break;
+            }
+        }
+
+        public void GetCompany()
+        {
+            Company = new ObservableCollection<Company>();
+            _dataService.GetCompany(
+                (items, error) =>
+                {
+                    if (error != null)
+                    {
+                        // Report error here
+                        return;
+                    }
+
+                    Company = items;
+                });
         }
 
         ////public override void Cleanup()
