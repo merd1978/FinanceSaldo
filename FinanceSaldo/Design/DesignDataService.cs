@@ -30,7 +30,7 @@ namespace FinanceSaldo.Design
         {
         }
 
-        public void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback)
+        public void GetInvoice4Company(Action<ObservableCollection<Invoice>, Exception> callback, Company company)
         {
             var DesignInvoice = new ObservableCollection<Invoice>();
             for (int index=0; index<15; index++)

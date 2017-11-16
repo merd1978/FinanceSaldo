@@ -1,26 +1,57 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.ObjectModel;
+using FinanceSaldo.Model;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 namespace FinanceSaldo.ViewModel
 {
     public class InvoiceViewModel : ViewModelBase
     {
+        private readonly IDataService _dataService;
+
         public string TabName
         {
             get;
             private set;
         }
 
-        public RelayCommand<object> CloseTabCommand { get; set; }
-        private void ExecuteCloseTabCommand(object index)
+        private Company _сompany;
+        public Company Company
         {
-            //TabCollection.RemoveAt((int)index);
+            get => _сompany;
+            set => Set(ref _сompany, value);
         }
 
-        public InvoiceViewModel(string tabName)
+        ObservableCollection<Invoice> _invoice;
+        public ObservableCollection<Invoice> Invoice
+        {
+            get => _invoice;
+            set => Set(ref _invoice, value);
+        }
+
+        public InvoiceViewModel(string tabName, IDataService dataService, Company company)
         {
             TabName = tabName;
-            CloseTabCommand = new RelayCommand<object>(ExecuteCloseTabCommand);
+            _dataService = dataService;
+            Company = company;
+
+            GetInvoice4Company(company);
+        }
+
+        public void GetInvoice4Company(Company company)
+        {
+            Invoice = new ObservableCollection<Invoice>();
+            _dataService.GetInvoice4Company(
+                (items, error) =>
+                {
+                    if (error != null)
+                    {
+                        // Report error here
+                        return;
+                    }
+
+                    Invoice = items;
+                }, company);
         }
     }
 }

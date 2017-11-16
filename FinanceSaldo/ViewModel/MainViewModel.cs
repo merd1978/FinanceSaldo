@@ -13,22 +13,6 @@ namespace FinanceSaldo.ViewModel
     {
         private readonly IDataService _dataService;
 
-        /// <summary>
-        /// The <see cref="WelcomeTitle" /> property's name.
-        /// </summary>
-        public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
-        private string _welcomeTitle = string.Empty;
-        /// <summary>
-        /// Gets the WelcomeTitle property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public string WelcomeTitle
-        {
-            get => _welcomeTitle;
-            set => Set(ref _welcomeTitle, value);
-        }
-
         #region Commands
         public RelayCommand EditCompanyCommand { get; set; }
         private void ExecuteEditCompanyCommand()
@@ -58,6 +42,13 @@ namespace FinanceSaldo.ViewModel
         {
             TabCollection.Remove(viewModel);
         }
+
+        public RelayCommand<Company> OpenCompanyTabCommand { get; set; }
+        private void ExecuteOpenCompanyTabCommand(Company company)
+        {
+            TabCollection.Add(new InvoiceViewModel(company.Name, _dataService, company));
+            SelectedTabIndex = TabCollection.Count - 1;
+        }
         #endregion
 
         ObservableCollection<Company> _company;
@@ -82,13 +73,6 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _selectedCompany, value);
         }
 
-        ObservableCollection<Invoice> _invoice;
-        public ObservableCollection<Invoice> Invoice
-        {
-            get => _invoice;
-            set => Set(ref _invoice, value);
-        }
-
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -96,26 +80,16 @@ namespace FinanceSaldo.ViewModel
         {
             _dataService = dataService;
             GetCompany();
-            Invoice = new ObservableCollection<Invoice>();
-            _dataService.GetInvoice(
-                (items, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
 
-                    Invoice = items;
-                });
 
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
+            OpenCompanyTabCommand = new RelayCommand<Company>(ExecuteOpenCompanyTabCommand);
 
-            TabCollection.Add(new InvoiceViewModel("Tab1"));
-            TabCollection.Add(new InvoiceViewModel("Tab2"));
+            //TabCollection.Add(new InvoiceViewModel("Tab1", _dataService));
+            //TabCollection.Add(new InvoiceViewModel("Tab2", _dataService));
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
         }

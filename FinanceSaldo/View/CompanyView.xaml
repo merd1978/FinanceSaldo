@@ -23,10 +23,15 @@
         </ToolBar>
         <TextBlock Grid.Row="1" TextWrapping="Wrap"
                    TextAlignment="Center" Text="Список Организаций" FontWeight="Bold" FontSize="16"/>
-        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedCompany}" AutoGenerateColumns="False">
+        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedCompany}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Предприятие" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick"
+                              Command="{Binding OpenCompanyTabCommand}"
+                              CommandParameter="{Binding ElementName=DgCompany, Path=SelectedItem}" />
+            </DataGrid.InputBindings>
         </DataGrid>
     </Grid>
 </UserControl>

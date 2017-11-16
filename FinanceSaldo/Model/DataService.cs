@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace FinanceSaldo.Model
 {
@@ -27,10 +28,10 @@ namespace FinanceSaldo.Model
             context.SaveChanges();
         }
 
-        public void GetInvoice(Action<ObservableCollection<Invoice>, Exception> callback)
+        public void GetInvoice4Company(Action<ObservableCollection<Invoice>, Exception> callback, Company company)
         {
-            var _invoice = context.Invoice;
-            callback(new ObservableCollection<Invoice>(_invoice), null);
+            var invoice = context.Invoice.Where(p => p.Company.CompanyId == company.CompanyId);
+            callback(new ObservableCollection<Invoice>(invoice), null);
         }
 
     }
