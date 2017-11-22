@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:view="clr-namespace:FinanceSaldo.View"
         xmlns:viewModel="clr-namespace:FinanceSaldo.ViewModel"
+        xml:lang="ru-RU"
         mc:Ignorable="d ignore"
         Height="700"
         Width="1300"

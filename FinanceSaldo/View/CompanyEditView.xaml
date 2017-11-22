@@ -38,6 +38,5 @@
                             Command="{Binding CloseTabCommand}"/>
             </StackPanel>
         </StackPanel>
-
     </Grid>
 </UserControl>

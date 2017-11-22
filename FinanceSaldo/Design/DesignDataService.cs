@@ -26,6 +26,10 @@ namespace FinanceSaldo.Design
         {
         }
 
+        public void UpdateCompany(Company company)
+        {
+        }
+
         public void RemoveCompany(Company company)
         {
         }

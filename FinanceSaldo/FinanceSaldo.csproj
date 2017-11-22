@@ -114,6 +114,7 @@
     <Compile Include="View\CompanyView.xaml.cs">
       <DependentUpon>CompanyView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DateTimeFormatConverter.cs" />
     <Compile Include="View\InvoiceView.xaml.cs">
       <DependentUpon>InvoiceView.xaml</DependentUpon>
     </Compile>

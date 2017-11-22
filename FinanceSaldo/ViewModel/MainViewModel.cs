@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -30,7 +31,9 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand RemoveCompanyCommand { get; set; }
         private void ExecuteRemoveCompanyCommand()
         {
-            if (SelectedCompany != null)
+            if (SelectedCompany == null) return;
+            MessageBoxResult messageBoxResult = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (messageBoxResult == MessageBoxResult.Yes)
             {
                 _dataService.RemoveCompany(SelectedCompany);
                 GetCompany();

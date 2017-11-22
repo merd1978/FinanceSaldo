@@ -4,16 +4,56 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:view="clr-namespace:FinanceSaldo.View"
         mc:Ignorable="d ignore"
         d:DesignWidth="743.881" d:DesignHeight="348.358">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock TextWrapping="Wrap"
-                   TextAlignment="Center" Text="Список накладных" FontWeight="Bold" FontSize="16"/>
-        <DataGrid x:Name="DgInvoice" Grid.Row="1" ItemsSource="{Binding Invoice}" CanUserAddRows="True"/>
-    </Grid>
+    <UserControl.Resources>
+        <view:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Список накладных" FontWeight="Bold" FontSize="16" Margin="0,0,10,0"/>
+                <TextBlock Text="{Binding Company.Name}" FontWeight="Bold" FontSize="16"/>
+             </StackPanel>
+            <DataGrid x:Name="DgInvoice" Grid.Row="1" ItemsSource="{Binding Invoice}" AutoGenerateColumns="False" CanUserAddRows="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№ Накладной" Width="175" 
+                                        Binding="{Binding Name}">
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Дата">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date, StringFormat=d, Converter={StaticResource DateTimeFormatConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DatePicker  SelectedDate="{Binding Path=Date, Converter={StaticResource DateTimeFormatConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Дебит" 
+                                        Binding="{Binding Debit}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Кредит" 
+                                        Binding="{Binding Credit}">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <StackPanel Margin="0 10 0 10" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Content="Сохранить" Margin="10 0 10 0" MinWidth="50" 
+                    Command="{Binding UpdateCompanyCommand}"/>
+            <Button Content="Отмена" Margin="10 0 10 0"
+                    Command="{Binding CloseTabCommand}"/>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

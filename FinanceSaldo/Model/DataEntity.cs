@@ -15,7 +15,7 @@ namespace FinanceSaldo.Model
             modelBuilder.Configurations.Add(new CompanyMap());
         }
     
-        public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<Invoice> Invoice { get; set; }
+        public DbSet<Company> Company { get; set; }
+        public DbSet<Invoice> Invoice { get; set; }
     }
 }
