@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -81,6 +82,7 @@ namespace FinanceSaldo.ViewModel
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
+            Environment.SetEnvironmentVariable("USERPROFILE", "e:\\kursovoy");
             _dataService = dataService;
             GetCompany();
 
