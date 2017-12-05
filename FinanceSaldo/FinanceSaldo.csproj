@@ -98,6 +98,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Design\DesignDataService.cs" />
+    <Compile Include="Migrations\201711211103000_InitialCreate.cs" />
+    <Compile Include="Migrations\201711211103000_InitialCreate.Designer.cs">
+      <DependentUpon>201711211103000_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711230944290_ChangeDateTime2DateTime2.cs" />
+    <Compile Include="Migrations\201711230944290_ChangeDateTime2DateTime2.Designer.cs">
+      <DependentUpon>201711230944290_ChangeDateTime2DateTime2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711231250235_CompnayNameRequired.cs" />
+    <Compile Include="Migrations\201711231250235_CompnayNameRequired.Designer.cs">
+      <DependentUpon>201711231250235_CompnayNameRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\CompanyMap.cs" />
     <Compile Include="Model\DataEntity.cs" />
     <Compile Include="Model\DataService.cs" />
@@ -114,7 +127,6 @@
     <Compile Include="View\CompanyView.xaml.cs">
       <DependentUpon>CompanyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DateTimeFormatConverter.cs" />
     <Compile Include="View\InvoiceView.xaml.cs">
       <DependentUpon>InvoiceView.xaml</DependentUpon>
     </Compile>
@@ -161,6 +173,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201711211103000_InitialCreate.resx">
+      <DependentUpon>201711211103000_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711230944290_ChangeDateTime2DateTime2.resx">
+      <DependentUpon>201711230944290_ChangeDateTime2DateTime2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711231250235_CompnayNameRequired.resx">
+      <DependentUpon>201711231250235_CompnayNameRequired.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

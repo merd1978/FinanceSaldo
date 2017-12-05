@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinanceSaldo.Model
 {
@@ -6,6 +7,7 @@ namespace FinanceSaldo.Model
     {
         public int InvoiceId { get; set; }
         public string Name { get; set; }
+        [Column(TypeName = "datetime2")]
         public DateTime Date { get; set; } = DateTime.Now;
         public decimal Debit { get; set; }
         public decimal Credit { get; set; }

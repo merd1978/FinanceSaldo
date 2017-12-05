@@ -6,6 +6,8 @@ namespace FinanceSaldo.Model
     {
         public CompanyMap()
         {
+            Property(p => p.Name)
+                .IsRequired();
             HasMany(pt => pt.Invoice)
                 .WithRequired(p => p.Company)
                 .WillCascadeOnDelete(true);

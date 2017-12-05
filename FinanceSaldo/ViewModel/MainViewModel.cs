@@ -1,7 +1,7 @@
-﻿using System;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -25,7 +25,7 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand NewCompanyCommand { get; set; }
         private void ExecuteNewCompanyCommand()
         {
-            TabCollection.Add(new CompanyEditViewModel("New", _dataService));
+            TabCollection.Add(new CompanyEditViewModel("Новая", _dataService));
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
@@ -33,7 +33,8 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteRemoveCompanyCommand()
         {
             if (SelectedCompany == null) return;
-            MessageBoxResult messageBoxResult = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedCompany.Name + "?", "Подтверждение удаления",
+                MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 _dataService.RemoveCompany(SelectedCompany);
@@ -62,6 +63,13 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _company, value);
         }
 
+        private Company _selectedCompany;
+        public Company SelectedCompany
+        {
+            get => _selectedCompany;
+            set => Set(ref _selectedCompany, value);
+        }
+
         public ObservableCollection<ViewModelBase> TabCollection { get; } = new ObservableCollection<ViewModelBase>();
         private int _selectedTabIndex;
         public int SelectedTabIndex
@@ -70,31 +78,23 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _selectedTabIndex, value);
         }
 
-        private Company _selectedCompany;
-        public Company SelectedCompany
-        {
-            get => _selectedCompany;
-            set => Set(ref _selectedCompany, value);
-        }
-
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
-            Environment.SetEnvironmentVariable("USERPROFILE", "e:\\kursovoy");
+            //Environment.SetEnvironmentVariable("USERPROFILE", "e:\\kursovoy");
+
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
             _dataService = dataService;
             GetCompany();
-
-
+            
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
             OpenCompanyTabCommand = new RelayCommand<Company>(ExecuteOpenCompanyTabCommand);
-
-            //TabCollection.Add(new InvoiceViewModel("Tab1", _dataService));
-            //TabCollection.Add(new InvoiceViewModel("Tab2", _dataService));
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
         }

@@ -1,4 +1,32 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
+    <Style x:Key="TextBoxInError" TargetType="TextBox">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Foreground="Red" FontWeight="Bold">*</TextBlock>
+                        <TextBlock Text="{Binding ErrorContent}" DockPanel.Dock="Bottom" Foreground="Red"/>
+                        <Border BorderBrush="Red" BorderThickness="2">
+                            <AdornedElementPlaceholder/>
+                        </Border>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="MinWidth" Value="75"></Setter>
+        <Setter Property="Background" Value="DarkSlateBlue"></Setter>
+        <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+    </Style>
+
 </ResourceDictionary>
