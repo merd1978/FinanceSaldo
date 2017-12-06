@@ -17,16 +17,26 @@ namespace FinanceSaldo.Model
             var company = _context.Company;
             callback(new ObservableCollection<Company>(company), null);
         }
+
+        public void GetCompanyWithSaldo(Action<ObservableCollection<Company>, Exception> callback)
+        {
+            var companyWithSaldo = _context.Company.Select(m =>
+                new { m.Name, FinalSalary = m.Saldo + m.Invoice.Sum(o => o.Debit) });
+            callback(new ObservableCollection<Company>(companyWithSaldo), null);
+        }
+
         public void CreateCompany(Company company)
         {
             _context.Company.Add(company);
             _context.SaveChanges();
         }
+
         public void UpdateCompany(Company company)
         {
             _context.Company.Attach(company);
             _context.SaveChanges();
         }
+
         public void RemoveCompany(Company company)
         {
             _context.Company.Remove(company);
