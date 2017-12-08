@@ -47,7 +47,7 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteSaveCommand()
         {
             _dataService.CreateCompany(_company);
-            Messenger.Default.Send(new NotificationMessage("RefreshCompany"));
+            Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
         public RelayCommand CloseTabCommand { get; set; }

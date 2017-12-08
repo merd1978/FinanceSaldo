@@ -118,6 +118,7 @@
     <Compile Include="Model\Invoice.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="ViewModel\CompanyEditViewModel.cs" />
+    <Compile Include="ViewModel\CompanyList.cs" />
     <Compile Include="ViewModel\InvoiceViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

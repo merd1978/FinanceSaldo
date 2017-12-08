@@ -33,11 +33,11 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteRemoveCompanyCommand()
         {
             if (SelectedCompany == null) return;
-            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedCompany.Name + "?", "Подтверждение удаления",
+            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedCompany.Company.Name + "?", "Подтверждение удаления",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                _dataService.RemoveCompany(SelectedCompany);
+                _dataService.RemoveCompany(SelectedCompany.Company);
                 GetCompany();
             }
         }
@@ -48,23 +48,23 @@ namespace FinanceSaldo.ViewModel
             TabCollection.Remove(viewModel);
         }
 
-        public RelayCommand<Company> OpenCompanyTabCommand { get; set; }
-        private void ExecuteOpenCompanyTabCommand(Company company)
+        public RelayCommand<CompanyList> OpenCompanyTabCommand { get; set; }
+        private void ExecuteOpenCompanyTabCommand(CompanyList companyList)
         {
-            TabCollection.Add(new InvoiceViewModel(company.Name, _dataService, company));
+            TabCollection.Add(new InvoiceViewModel(companyList.Company.Name, _dataService, companyList.Company));
             SelectedTabIndex = TabCollection.Count - 1;
         }
         #endregion
 
-        ObservableCollection<Company> _company;
-        public ObservableCollection<Company> Company
+        ObservableCollection<CompanyList> _companyList;
+        public ObservableCollection<CompanyList> CompanyList
         {
-            get => _company;
-            set => Set(ref _company, value);
+            get => _companyList;
+            set => Set(ref _companyList, value);
         }
 
-        private Company _selectedCompany;
-        public Company SelectedCompany
+        private CompanyList _selectedCompany;
+        public CompanyList SelectedCompany
         {
             get => _selectedCompany;
             set => Set(ref _selectedCompany, value);
@@ -94,7 +94,7 @@ namespace FinanceSaldo.ViewModel
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
-            OpenCompanyTabCommand = new RelayCommand<Company>(ExecuteOpenCompanyTabCommand);
+            OpenCompanyTabCommand = new RelayCommand<CompanyList>(ExecuteOpenCompanyTabCommand);
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
         }
@@ -104,7 +104,7 @@ namespace FinanceSaldo.ViewModel
             string notification = notificationMessage.Notification;
             switch (notification)
             {
-                case "RefreshCompany":
+                case "UpdateCompany":
                     GetCompany();
                     break;
                 case "CloseCurrentTab":
@@ -115,8 +115,8 @@ namespace FinanceSaldo.ViewModel
 
         public void GetCompany()
         {
-            Company = new ObservableCollection<Company>();
-            _dataService.GetCompany(
+            CompanyList = new ObservableCollection<CompanyList>();
+            _dataService.GetCompanyWithSaldo(
                 (items, error) =>
                 {
                     if (error != null)
@@ -125,7 +125,7 @@ namespace FinanceSaldo.ViewModel
                         return;
                     }
 
-                    Company = items;
+                    CompanyList = items;
                 });
         }
 

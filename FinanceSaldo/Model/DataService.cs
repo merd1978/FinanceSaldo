@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using FinanceSaldo.ViewModel;
 
 namespace FinanceSaldo.Model
 {
@@ -18,11 +19,14 @@ namespace FinanceSaldo.Model
             callback(new ObservableCollection<Company>(company), null);
         }
 
-        public void GetCompanyWithSaldo(Action<ObservableCollection<Company>, Exception> callback)
+        public void GetCompanyWithSaldo(Action<ObservableCollection<CompanyList>, Exception> callback)
         {
-            var companyWithSaldo = _context.Company.Select(m =>
-                new { m.Name, FinalSalary = m.Saldo + m.Invoice.Sum(o => o.Debit) });
-            callback(new ObservableCollection<Company>(companyWithSaldo), null);
+            var query = _context.Company.Select(m => new CompanyList
+            {
+                Company = m,
+                TotalSaldo = (int)(m.Saldo + m.Invoice.Sum(o => (Decimal?)o.Debit - o.Credit) ?? 0M)
+            });
+            callback(new ObservableCollection<CompanyList>(query), null);
         }
 
         public void CreateCompany(Company company)

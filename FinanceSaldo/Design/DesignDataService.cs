@@ -1,6 +1,7 @@
 ﻿using System;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using FinanceSaldo.ViewModel;
 
 namespace FinanceSaldo.Design
 {
@@ -20,6 +21,10 @@ namespace FinanceSaldo.Design
                 DesignCompany.Add(company);
             }
             callback(DesignCompany, null);
+        }
+
+        public void GetCompanyWithSaldo(Action<ObservableCollection<CompanyList>, Exception> callback)
+        {
         }
 
         public void CreateCompany(Company company)

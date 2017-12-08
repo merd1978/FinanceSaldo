@@ -23,9 +23,11 @@
                 <Image Source="../Image/red-minus.png" MaxHeight="16"></Image>
             </Button>
         </ToolBar>
-        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedCompany}" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedCompany}" 
+                  AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Company.Name}"/>
+                <DataGridTextColumn Header="Сальдо" Binding="{Binding TotalSaldo}"/>
             </DataGrid.Columns>
             <DataGrid.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick"
