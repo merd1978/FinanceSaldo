@@ -10,6 +10,8 @@ namespace FinanceSaldo.Model
         readonly DataEntity _context;
         public DataService()
         {
+            //AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
             _context = new DataEntity();
             _context.Database.CreateIfNotExists();
         }
