@@ -39,6 +39,10 @@ namespace FinanceSaldo.Design
         {
         }
 
+        public void RemoveInvoice(Invoice invoice)
+        {
+        }
+
         public void GetInvoice4Company(Action<ObservableCollection<Invoice>, Exception> callback, Company company)
         {
             var DesignInvoice = new ObservableCollection<Invoice>();

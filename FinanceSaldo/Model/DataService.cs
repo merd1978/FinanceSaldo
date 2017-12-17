@@ -10,8 +10,7 @@ namespace FinanceSaldo.Model
         readonly DataEntity _context;
         public DataService()
         {
-            //AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
+            AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             _context = new DataEntity();
             _context.Database.CreateIfNotExists();
         }
@@ -47,6 +46,16 @@ namespace FinanceSaldo.Model
         {
             _context.Company.Remove(company);
             _context.SaveChanges();
+        }
+
+        public void RemoveInvoice(Invoice invoice)
+        {
+            if (invoice == null) return;
+            if (_context.Invoice.Any(o => o.InvoiceId == invoice.InvoiceId))
+            {
+                _context.Invoice.Remove(invoice);
+                _context.SaveChanges();
+            }
         }
     }
 }

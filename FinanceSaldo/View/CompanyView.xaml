@@ -26,8 +26,9 @@
         <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedCompany}" 
                   AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Company.Name}"/>
-                <DataGridTextColumn Header="Сальдо" Binding="{Binding TotalSaldo}"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Company.Name}" Width="100"/>
+                <DataGridTextColumn Header="Сальдо" Binding="{Binding TotalSaldo}" Width="50"/>
+                <DataGridTextColumn Header="Комментарии" Binding="{Binding Company.Description}" Width="100"/>
             </DataGrid.Columns>
             <DataGrid.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick"

@@ -29,4 +29,12 @@
         <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
     </Style>
 
+    <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="RowBackground" Value="WhiteSmoke"></Setter>
+        <Setter Property="AlternatingRowBackground" Value="White"></Setter>
+        <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="VerticalGridLinesBrush" Value="DarkGray"/>
+        <Setter Property="BorderBrush" Value="DarkGray" />
+    </Style>
+
 </ResourceDictionary>

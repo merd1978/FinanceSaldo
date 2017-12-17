@@ -9,7 +9,7 @@
         mc:Ignorable="d ignore"
         Height="700"
         Width="1300"
-        Title="BZSP Сальдо"
+        Title="Сальдо"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -30,13 +30,10 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="2">
-            <MenuItem Header="_FILE"/>
-            <MenuItem Header="_EDIT"/>
-            <MenuItem Header="_TOOLS"/>
-            <MenuItem Header="_HELP"/>
+            <MenuItem Header="_ПОМОЩЬ" Command="{Binding HelpCommand}"/>
         </Menu>
         <view:CompanyView Grid.Row="2" Grid.Column="0" Margin="5,5,5,0"/>
         <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0"
@@ -60,21 +57,12 @@
                     <view:InvoiceView/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModel:CompanyEditViewModel}">
-                    <view:CompanyEditView />
+                    <view:CompanyEditView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModel:HelpViewModel}">
+                    <view:HelpView/>
                 </DataTemplate>
             </TabControl.Resources>
         </TabControl>
-        <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <TextBlock>Status bar</TextBlock>
-        </StatusBar>
-
-        <!--<TextBlock FontSize="36"
-                   FontWeight="Bold"
-                   Foreground="Purple"
-                   Text="{Binding WelcomeTitle}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   TextWrapping="Wrap" />-->
-
     </Grid>
 </Window>

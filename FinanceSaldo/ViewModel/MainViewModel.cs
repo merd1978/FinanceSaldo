@@ -29,6 +29,13 @@ namespace FinanceSaldo.ViewModel
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
+        public RelayCommand HelpCommand { get; set; }
+        private void ExecuteHelpCommand()
+        {
+            TabCollection.Add(new HelpViewModel());
+            SelectedTabIndex = TabCollection.Count - 1;
+        }
+
         public RelayCommand RemoveCompanyCommand { get; set; }
         private void ExecuteRemoveCompanyCommand()
         {
@@ -83,8 +90,6 @@ namespace FinanceSaldo.ViewModel
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
-            //Environment.SetEnvironmentVariable("USERPROFILE", "e:\\kursovoy");
-
             System.Threading.Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
 
             _dataService = dataService;
@@ -92,6 +97,7 @@ namespace FinanceSaldo.ViewModel
             
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
+            HelpCommand = new RelayCommand(ExecuteHelpCommand);
             RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
             OpenCompanyTabCommand = new RelayCommand<CompanyList>(ExecuteOpenCompanyTabCommand);

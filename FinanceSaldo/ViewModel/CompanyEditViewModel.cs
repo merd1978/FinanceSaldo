@@ -48,6 +48,7 @@ namespace FinanceSaldo.ViewModel
         {
             _dataService.CreateCompany(_company);
             Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
+            Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
         public RelayCommand CloseTabCommand { get; set; }

@@ -11,5 +11,6 @@ namespace FinanceSaldo.Model
         void CreateCompany(Company company);
         void UpdateCompany(Company company);
         void RemoveCompany(Company company);
+        void RemoveInvoice(Invoice invoice);
     }
 }
