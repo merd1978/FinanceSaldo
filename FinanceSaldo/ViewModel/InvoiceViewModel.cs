@@ -83,7 +83,7 @@ namespace FinanceSaldo.ViewModel
         {
             foreach (Invoice inv in Invoice)
             {
-                if (inv.Name.ToLower().Contains(SearchText))
+                if (inv.Name != null && inv.Name.ToLower().Contains(SearchText))
                 {
                     SelectedInvoice = inv;
                 }

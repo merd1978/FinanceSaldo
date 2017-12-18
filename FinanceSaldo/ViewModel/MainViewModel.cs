@@ -130,7 +130,6 @@ namespace FinanceSaldo.ViewModel
                         // Report error here
                         return;
                     }
-
                     CompanyList = items;
                 });
         }
