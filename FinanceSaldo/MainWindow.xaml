@@ -9,7 +9,7 @@
         mc:Ignorable="d ignore"
         Height="700"
         Width="1300"
-        Title="Сальдо"
+        Title="BZSP Сальдо"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -33,10 +33,10 @@
             <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="2">
-            <MenuItem Header="_ПОМОЩЬ" Command="{Binding HelpCommand}"/>
+            <MenuItem Header="_Помощь" Command="{Binding HelpCommand}"/>
         </Menu>
-        <view:CompanyView Grid.Row="2" Grid.Column="0" Margin="5,5,5,0"/>
-        <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0"
+        <view:CompanyView Grid.Row="2" Grid.Column="0" />
+        <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5 5 5 5"
                     ItemsSource="{Binding TabCollection}" SelectedIndex="{Binding SelectedTabIndex}">
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->

@@ -10,15 +10,9 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace FinanceSaldo.ViewModel
 {
-    public class InvoiceViewModel : ViewModelBase
+    public class InvoiceViewModel : TabViewModelBase
     {
         private readonly IDataService _dataService;
-
-        public string TabName
-        {
-            get;
-            private set;
-        }
 
         private Company _сompany;
         public Company Company
@@ -91,9 +85,8 @@ namespace FinanceSaldo.ViewModel
         }
 
 
-        public InvoiceViewModel(string tabName, IDataService dataService, Company company)
+        public InvoiceViewModel(string tabName, IDataService dataService, Company company) : base(tabName)
         {
-            TabName = tabName;
             _dataService = dataService;
             Company = company;
             Invoice = new ObservableCollection<Invoice>(company.Invoice);

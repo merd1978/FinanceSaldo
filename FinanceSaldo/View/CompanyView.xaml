@@ -6,24 +6,53 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
         DataContext="{Binding Main, Source={StaticResource Locator}}" d:DesignWidth="200.881" d:DesignHeight="348.358">
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" TextWrapping="Wrap"
-                   TextAlignment="Center" Text="Список Организаций" FontWeight="Bold" FontSize="16"/>
-        <ToolBar Grid.Row="1" Grid.Column="0" ToolBarTray.IsLocked="True">
-            <Button Command="{Binding NewCompanyCommand}" ToolTip="Добавить Организацию">
-                <Image Source="../Image/plus-icon-0.png" MaxHeight="16"></Image>
-            </Button>
-            <Button Command="{Binding RemoveCompanyCommand}" ToolTip="Удалить Организацию">
-                <Image Source="../Image/red-minus.png" MaxHeight="16"></Image>
-            </Button>
-        </ToolBar>
-        <DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedCompany}" 
+    <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5 5 5 5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ToolBar x:Name="TbMain" Grid.Row="0" Grid.Column="0" ToolBarTray.IsLocked="True" Background="Transparent" OverflowMode="Never"
+                     Loaded="TbMain_Loaded">
+                <TextBlock TextWrapping="Wrap"
+                           TextAlignment="Center" Text="Список Организаций" FontSize="14" Margin="0 0 5 0"/>
+                <Button Command="{Binding NewCompanyCommand}" ToolTip="Добавить Организацию">
+                    <Image Source="../Image/plus-icon-0.png" MaxHeight="16"></Image>
+                </Button>
+                <Button Command="{Binding RemoveCompanyCommand}" ToolTip="Удалить Организацию">
+                    <Image Source="../Image/red-minus.png" MaxHeight="16"></Image>
+                </Button>
+            </ToolBar>
+            <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0"
+                      ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedIndex}">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Company.Name}"></TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <GridViewColumn.Header>
+                                    <TextBlock Text="Наименование" Width="140"></TextBlock>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalSaldo}" Width="70"></TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <GridViewColumn.Header>
+                                    <TextBlock Text="Сальдо"></TextBlock>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <!--<DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedCompany}" 
                   AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование" Binding="{Binding Company.Name}" Width="100"/>
@@ -35,6 +64,7 @@
                               Command="{Binding OpenCompanyTabCommand}"
                               CommandParameter="{Binding ElementName=DgCompany, Path=SelectedItem}" />
             </DataGrid.InputBindings>
-        </DataGrid>
-    </Grid>
+        </DataGrid>-->
+        </Grid>
+    </Border>
 </UserControl>

@@ -18,8 +18,6 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock TextWrapping="Wrap" Text="Список накладных" FontWeight="Bold" FontSize="16" Margin="0 0 10 0"/>
                 <TextBlock Text="{Binding Company.Name}" FontWeight="Bold" FontSize="16"/>
-                <TextBlock TextWrapping="Wrap" Text="Начальное сальдо" FontWeight="Bold" FontSize="16" Margin="10 0 10 0"/>
-                <TextBlock Text="{Binding Company.Saldo}" FontWeight="Bold" FontSize="16"/>
              </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5 0 0 5">
                 <TextBox Width="170" Text="{Binding SearchText}"/>

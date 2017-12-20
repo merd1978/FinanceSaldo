@@ -15,5 +15,18 @@ namespace FinanceSaldo.View
         {
             InitializeComponent();
         }
+
+        private void TbMain_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is ToolBar toolBar)) return;
+            foreach (FrameworkElement a in TbMain.Items)
+            {
+                ToolBar.SetOverflowMode(a, OverflowMode.Never);
+            }
+            if (toolBar.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
+            {
+                overflowGrid.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

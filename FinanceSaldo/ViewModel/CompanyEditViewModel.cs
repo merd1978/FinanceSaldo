@@ -10,15 +10,9 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace FinanceSaldo.ViewModel
 {
-    public class CompanyEditViewModel : ViewModelBase, IDataErrorInfo
+    public class CompanyEditViewModel : TabViewModelBase, IDataErrorInfo
     {
         private readonly IDataService _dataService;
-
-        public string TabName
-        {
-            get;
-            private set;
-        }
 
         private Company _company = new Company();
         public Company Company
@@ -26,7 +20,6 @@ namespace FinanceSaldo.ViewModel
             get => _company;
             set => Set(ref _company, value);
         }
-
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Поле не может быть пустым")]
         public string CompanyName
@@ -57,9 +50,8 @@ namespace FinanceSaldo.ViewModel
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
-        public CompanyEditViewModel(string tabName, IDataService dataService)
+        public CompanyEditViewModel(string tabName, IDataService dataService) : base(tabName)
         {
-            TabName = tabName;
             _dataService = dataService;
 
             SaveCommand = new RelayCommand(ExecuteSaveCommand);

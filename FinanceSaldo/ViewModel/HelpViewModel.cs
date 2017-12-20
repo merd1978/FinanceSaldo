@@ -1,11 +1,7 @@
-﻿using GalaSoft.MvvmLight;
-
-namespace FinanceSaldo.ViewModel
+﻿namespace FinanceSaldo.ViewModel
 {
-    public class HelpViewModel : ViewModelBase
+    public class HelpViewModel : TabViewModelBase
     {
-        public string TabName => "Помощь";
-
         public string Title => "Finance Saldo";
 
         public string About => "Приложение Financesaldo разработано для проведения расчётов между несколькими субъектами хозяйствования." +
@@ -14,5 +10,9 @@ namespace FinanceSaldo.ViewModel
                                " о истории взаиморасчётов нужной вам организации. ";
 
         public string Bottom => "Год разработки 2017. Разработано в учебных целях.";
+
+        public HelpViewModel() : base("Помощь")
+        {
+        }
     }
 }

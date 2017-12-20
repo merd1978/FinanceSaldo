@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceSaldo", "FinanceSaldo\FinanceSaldo.csproj", "{F0943245-3A29-47DD-A788-A0A31181D68E}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{D1C085FD-E613-474B-AD72-90BFEB587455}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,14 +27,6 @@ Global
 		{F0943245-3A29-47DD-A788-A0A31181D68E}.Release|x64.Build.0 = Release|x64
 		{F0943245-3A29-47DD-A788-A0A31181D68E}.Release|x86.ActiveCfg = Release|Any CPU
 		{F0943245-3A29-47DD-A788-A0A31181D68E}.Release|x86.Build.0 = Release|Any CPU
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Debug|Any CPU.ActiveCfg = Debug
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Debug|x64.ActiveCfg = Debug
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Debug|x64.Build.0 = Debug
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Debug|x86.ActiveCfg = Debug
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Release|Any CPU.ActiveCfg = Release
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Release|x64.ActiveCfg = Release
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Release|x64.Build.0 = Release
-		{D1C085FD-E613-474B-AD72-90BFEB587455}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

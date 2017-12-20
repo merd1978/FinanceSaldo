@@ -2,6 +2,7 @@
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -39,27 +40,36 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand RemoveCompanyCommand { get; set; }
         private void ExecuteRemoveCompanyCommand()
         {
-            if (SelectedCompany == null) return;
-            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedCompany.Company.Name + "?", "Подтверждение удаления",
+            if (SelectedItem == null) return;
+            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedItem.Company.Name + "?", "Подтверждение удаления",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                _dataService.RemoveCompany(SelectedCompany.Company);
+                _dataService.RemoveCompany(SelectedItem.Company);
                 GetCompany();
             }
         }
 
-        public RelayCommand<ViewModelBase> CloseTabCommand { get; set; }
-        private void ExecuteCloseTabCommand(ViewModelBase viewModel)
+        public RelayCommand<TabViewModelBase> CloseTabCommand { get; set; }
+        private void ExecuteCloseTabCommand(TabViewModelBase viewModel)
         {
             TabCollection.Remove(viewModel);
+  
         }
 
-        public RelayCommand<CompanyList> OpenCompanyTabCommand { get; set; }
-        private void ExecuteOpenCompanyTabCommand(CompanyList companyList)
+        public RelayCommand OpenCompanyTabCommand { get; set; }
+        private void ExecuteOpenCompanyTabCommand()
         {
-            TabCollection.Add(new InvoiceViewModel(companyList.Company.Name, _dataService, companyList.Company));
-            SelectedTabIndex = TabCollection.Count - 1;
+            var tab = TabCollection.FirstOrDefault(t => t.TabName == SelectedItem.Company.Name);
+            if (tab == null)
+            {
+                TabCollection.Add(new InvoiceViewModel(SelectedItem.Company.Name, _dataService, SelectedItem.Company));
+                SelectedTabIndex = TabCollection.Count - 1;
+            }
+            else
+            {
+                SelectedTabIndex = TabCollection.IndexOf(tab);
+            }
         }
         #endregion
 
@@ -70,19 +80,44 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _companyList, value);
         }
 
-        private CompanyList _selectedCompany;
-        public CompanyList SelectedCompany
+        private CompanyList _selectedItem;
+        public CompanyList SelectedItem
         {
-            get => _selectedCompany;
-            set => Set(ref _selectedCompany, value);
+            get => _selectedItem;
+            set
+            {
+                Set(ref _selectedItem, value);
+                if (value != null) ExecuteOpenCompanyTabCommand();
+            } 
         }
 
-        public ObservableCollection<ViewModelBase> TabCollection { get; } = new ObservableCollection<ViewModelBase>();
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => Set(ref _selectedIndex, value);
+        }
+
+        public ObservableCollection<TabViewModelBase> TabCollection { get; } = new ObservableCollection<TabViewModelBase>();
         private int _selectedTabIndex;
         public int SelectedTabIndex
         {
             get => _selectedTabIndex;
-            set => Set(ref _selectedTabIndex, value);
+            set
+            {
+                Set(ref _selectedTabIndex, value);
+                if (value == -1)
+                {
+                    SelectedIndex = -1;
+                    return;
+                }
+
+                if (TabCollection[SelectedTabIndex] is InvoiceViewModel invoiceViewModel)
+                {
+                    var company = CompanyList.FirstOrDefault(c => c.Company.CompanyId == invoiceViewModel.Company.CompanyId);
+                    SelectedIndex = CompanyList.IndexOf(company);
+                }
+            }
         }
 
         /// <summary>
@@ -99,8 +134,8 @@ namespace FinanceSaldo.ViewModel
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
             RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
-            CloseTabCommand = new RelayCommand<ViewModelBase>(ExecuteCloseTabCommand);
-            OpenCompanyTabCommand = new RelayCommand<CompanyList>(ExecuteOpenCompanyTabCommand);
+            CloseTabCommand = new RelayCommand<TabViewModelBase>(ExecuteCloseTabCommand);
+            OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
         }
