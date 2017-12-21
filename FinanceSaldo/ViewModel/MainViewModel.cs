@@ -2,7 +2,6 @@
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -26,7 +25,7 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand NewCompanyCommand { get; set; }
         private void ExecuteNewCompanyCommand()
         {
-            TabCollection.Add(new CompanyEditViewModel("Новая", _dataService));
+            TabCollection.Add(new CompanyEditViewModel(_dataService));
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
@@ -45,30 +44,44 @@ namespace FinanceSaldo.ViewModel
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                _dataService.RemoveCompany(SelectedItem.Company);
-                GetCompany();
+                CompanyList item = SelectedItem;
+                int index = SelectedIndex;
+                RemoveCompany(item.Company);
+                TabCollection.Remove(item.InvoiceViewModel);
+                CompanyList.RemoveAt(index);
             }
         }
 
         public RelayCommand<TabViewModelBase> CloseTabCommand { get; set; }
         private void ExecuteCloseTabCommand(TabViewModelBase viewModel)
         {
+            if (viewModel is InvoiceViewModel invoiceViewModel)
+            {
+                int indx = CompanyList.IndexOf(invoiceViewModel.CompanyList);
+                if (indx == -1)
+                {
+                    //error company not found
+                    return;
+                }
+                CompanyList[indx].InvoiceViewModel = null;
+            }
             TabCollection.Remove(viewModel);
-  
         }
 
         public RelayCommand OpenCompanyTabCommand { get; set; }
         private void ExecuteOpenCompanyTabCommand()
         {
-            var tab = TabCollection.FirstOrDefault(t => t.TabName == SelectedItem.Company.Name);
-            if (tab == null)
+            InvoiceViewModel invoiceViewModel = CompanyList[SelectedIndex].InvoiceViewModel;
+            if (invoiceViewModel == null)
             {
-                TabCollection.Add(new InvoiceViewModel(SelectedItem.Company.Name, _dataService, SelectedItem.Company));
+                invoiceViewModel = new InvoiceViewModel(_dataService, SelectedItem);
+                TabCollection.Add(invoiceViewModel);
+                CompanyList[SelectedIndex].InvoiceViewModel = invoiceViewModel;
                 SelectedTabIndex = TabCollection.Count - 1;
             }
             else
             {
-                SelectedTabIndex = TabCollection.IndexOf(tab);
+                SelectedTabIndex = TabCollection.IndexOf(invoiceViewModel);
             }
         }
         #endregion
@@ -112,10 +125,13 @@ namespace FinanceSaldo.ViewModel
                     return;
                 }
 
-                if (TabCollection[SelectedTabIndex] is InvoiceViewModel invoiceViewModel)
+                if (TabCollection[value] is InvoiceViewModel invoiceViewModel)
                 {
-                    var company = CompanyList.FirstOrDefault(c => c.Company.CompanyId == invoiceViewModel.Company.CompanyId);
-                    SelectedIndex = CompanyList.IndexOf(company);
+                    SelectedIndex = CompanyList.IndexOf(invoiceViewModel.CompanyList);
+                }
+                else
+                {
+                    SelectedIndex = -1;
                 }
             }
         }
@@ -157,16 +173,27 @@ namespace FinanceSaldo.ViewModel
         public void GetCompany()
         {
             CompanyList = new ObservableCollection<CompanyList>();
-            _dataService.GetCompanyWithSaldo(
-                (items, error) =>
+            _dataService.GetCompanyWithSaldo((items, error) =>
+            {
+                if (error != null)
                 {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
-                    CompanyList = items;
-                });
+                    // Get Company list error
+                    return;
+                }
+                CompanyList = items;
+            });
+        }
+
+        public void RemoveCompany(Company company)
+        {
+            _dataService.RemoveCompany(company, (error) =>
+            {
+                if (error != null)
+                {
+                    // Unable remove company
+                    return;
+                }
+            });
         }
 
         ////public override void Cleanup()

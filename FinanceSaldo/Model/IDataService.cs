@@ -10,7 +10,8 @@ namespace FinanceSaldo.Model
         void GetCompanyWithSaldo(Action<ObservableCollection<CompanyList>, Exception> callback);
         void CreateCompany(Company company);
         void UpdateCompany(Company company);
-        void RemoveCompany(Company company);
+        //void RemoveCompany(Company company);
+        void RemoveCompany(Company company, Action<Exception> callback);
         void RemoveInvoice(Invoice invoice);
     }
 }

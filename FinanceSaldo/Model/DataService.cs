@@ -42,10 +42,23 @@ namespace FinanceSaldo.Model
             _context.SaveChanges();
         }
 
-        public void RemoveCompany(Company company)
+        //public void RemoveCompany(Company company)
+        //{
+        //    _context.Company.Remove(company);
+        //    _context.SaveChanges();
+        //}
+
+        public void RemoveCompany(Company company, Action<Exception> callback)
         {
-            _context.Company.Remove(company);
-            _context.SaveChanges();
+            try
+            {
+                _context.Company.Remove(company);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                callback(ex);
+            }
         }
 
         public void RemoveInvoice(Invoice invoice)

@@ -6,5 +6,6 @@ namespace FinanceSaldo.ViewModel
     {
         public Company Company { get; set; }
         public int TotalSaldo { get; set; }
+        public InvoiceViewModel InvoiceViewModel { get; set; }
     }
 }

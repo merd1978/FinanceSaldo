@@ -35,9 +35,10 @@ namespace FinanceSaldo.Design
         {
         }
 
-        public void RemoveCompany(Company company)
-        {
-        }
+        //public void RemoveCompany(Company company)
+        //{
+        //}
+        public void RemoveCompany(Company company, Action<Exception> callback) { }
 
         public void RemoveInvoice(Invoice invoice)
         {

@@ -47,8 +47,8 @@
                                 FontFamily="Courier" FontSize="12" FontWeight="Bold"  Margin="5,0,0,0" Padding="0"
                                 Foreground="Black" Background="Transparent" BorderThickness="0"
                                 VerticalContentAlignment="Bottom" MinWidth="16" Width="16" Height="16" 
-                                Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                CommandParameter="{Binding ElementName=TabMain, Path=SelectedItem}"/>
+                                Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                CommandParameter="{Binding}"/>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

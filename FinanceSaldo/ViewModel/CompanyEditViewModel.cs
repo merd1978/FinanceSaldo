@@ -50,7 +50,7 @@ namespace FinanceSaldo.ViewModel
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
-        public CompanyEditViewModel(string tabName, IDataService dataService) : base(tabName)
+        public CompanyEditViewModel(IDataService dataService) : base("Новая")
         {
             _dataService = dataService;
 

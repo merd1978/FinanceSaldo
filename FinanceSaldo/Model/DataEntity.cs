@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 
 namespace FinanceSaldo.Model
 {
@@ -7,6 +8,7 @@ namespace FinanceSaldo.Model
         public DataEntity()
             : base("name=CompanyEntities")
         {
+            Database.Log = Console.WriteLine;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
