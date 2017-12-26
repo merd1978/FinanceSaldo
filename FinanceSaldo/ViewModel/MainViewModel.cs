@@ -154,6 +154,12 @@ namespace FinanceSaldo.ViewModel
             OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
+            Messenger.Default.Register<Company>(this, AddCompany);
+        }
+
+        public void AddCompany(Company company)
+        {
+            CompanyList.Add(new CompanyList {Company = company});
         }
 
         public void NotifyMe(NotificationMessage notificationMessage)
@@ -161,9 +167,6 @@ namespace FinanceSaldo.ViewModel
             string notification = notificationMessage.Notification;
             switch (notification)
             {
-                case "UpdateCompany":
-                    GetCompany();
-                    break;
                 case "CloseCurrentTab":
                     ExecuteCloseTabCommand(TabCollection[SelectedTabIndex]);
                     break;
@@ -173,7 +176,7 @@ namespace FinanceSaldo.ViewModel
         public void GetCompany()
         {
             CompanyList = new ObservableCollection<CompanyList>();
-            _dataService.GetCompanyWithSaldo((items, error) =>
+            _dataService.GetCompany((items, error) =>
             {
                 if (error != null)
                 {
