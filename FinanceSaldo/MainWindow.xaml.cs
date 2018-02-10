@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
+using System.Windows.Markup;
 using FinanceSaldo.ViewModel;
 
 namespace FinanceSaldo
@@ -15,6 +17,7 @@ namespace FinanceSaldo
         {
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
+            this.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
         }
     }
 }

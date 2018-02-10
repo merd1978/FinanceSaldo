@@ -20,12 +20,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"> </RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"> </RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
         </Menu>
         <view:CompanyView Grid.Row="2" Grid.Column="0" />
         <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5 5 5 5"
-                    ItemsSource="{Binding TabCollection}" SelectedIndex="{Binding SelectedTabIndex}">
+            ItemsSource="{Binding TabCollection}" SelectedIndex="{Binding SelectedTabIndex}">
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->
                 <DataTemplate>

@@ -9,6 +9,7 @@ namespace FinanceSaldo.Model
             : base("name=CompanyEntities")
         {
             Database.Log = Console.WriteLine;
+            AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

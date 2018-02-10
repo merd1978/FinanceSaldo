@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:view="clr-namespace:FinanceSaldo.View"
         mc:Ignorable="d ignore"
         DataContext="{Binding Main, Source={StaticResource Locator}}" d:DesignWidth="200.881" d:DesignHeight="348.358">
     <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5 5 5 5">
@@ -20,10 +21,10 @@
                     <Image Source="../Image/plus-icon-0.png" MaxHeight="16"></Image>
                 </Button>
                 <Button Command="{Binding RemoveCompanyCommand}" ToolTip="Удалить Организацию">
-                    <Image Source="../Image/red-minus.png" MaxHeight="16"></Image>
+                    <Image Source="../Image/red-minus.png" MaxHeight="16" view:GrayoutImageBehavior.GrayOutOnDisabled="True"></Image>
                 </Button>
             </ToolBar>
-            <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0"
+            <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0" AlternationCount="2"
                       ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedIndex}">
                 <ListView.View>
                     <GridView>
@@ -52,19 +53,6 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <!--<DataGrid x:Name="DgCompany" Grid.Row="2" ItemsSource="{Binding CompanyList}" SelectedItem="{Binding SelectedCompany}" 
-                  AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Наименование" Binding="{Binding Company.Name}" Width="100"/>
-                <DataGridTextColumn Header="Сальдо" Binding="{Binding TotalSaldo}" Width="50"/>
-                <DataGridTextColumn Header="Комментарии" Binding="{Binding Company.Description}" Width="100"/>
-            </DataGrid.Columns>
-            <DataGrid.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick"
-                              Command="{Binding OpenCompanyTabCommand}"
-                              CommandParameter="{Binding ElementName=DgCompany, Path=SelectedItem}" />
-            </DataGrid.InputBindings>
-        </DataGrid>-->
         </Grid>
     </Border>
 </UserControl>

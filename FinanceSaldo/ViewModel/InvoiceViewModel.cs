@@ -1,10 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using FinanceSaldo.Model;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -32,10 +29,47 @@ namespace FinanceSaldo.ViewModel
         public Invoice SelectedInvoice
         {
             get => _selectedInvoice;
-            set => Set(ref _selectedInvoice, value);
+            set
+            {
+                Set(ref _selectedInvoice, value);
+                UpdateCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private Invoice _editorInvoice;
+        public Invoice EditorInvoice
+        {
+            get => _editorInvoice;
+            set => Set(ref _editorInvoice, value);
+        }
+
+        ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "40", "30" };
+        public ObservableCollection<string> ExpiryDaysList
+        {
+            get => _expiryDaysList;
+            set => Set(ref _expiryDaysList, value);
         }
 
         public string SearchText { get; set; }
+
+        public RelayCommand AddCommand { get; set; }
+        private void ExecuteAddCommand()
+        {
+            Invoice.Add(EditorInvoice);
+            ExecuteSaveCommand();
+            EditorInvoice = new Invoice();
+            Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
+        }
+
+        public RelayCommand UpdateCommand { get; set; }
+        private void ExecuteUpdateCommand()
+        {
+        }
+
+        private bool CanExecuteUpdateCommand()
+        {
+            return SelectedInvoice != null ;
+        }
 
         public RelayCommand SaveCommand { get; set; }
         private void ExecuteSaveCommand()
@@ -90,7 +124,10 @@ namespace FinanceSaldo.ViewModel
             _dataService = dataService;
             CompanyList = companyList;
             Invoice = new ObservableCollection<Invoice>(companyList.Company.Invoice);
+            EditorInvoice = new Invoice();
 
+            AddCommand = new RelayCommand(ExecuteAddCommand);
+            UpdateCommand = new RelayCommand(ExecuteUpdateCommand, CanExecuteUpdateCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
             DeleteCommand = new RelayCommand(ExecuteDeleteCommand);
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);

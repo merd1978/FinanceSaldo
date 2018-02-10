@@ -40,7 +40,7 @@
     <BootstrapperComponentsLocation>Relative</BootstrapperComponentsLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -164,6 +164,10 @@
     <Compile Include="Migrations\201711231250235_CompnayNameRequired.Designer.cs">
       <DependentUpon>201711231250235_CompnayNameRequired.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802050846465_ExpiryDays.cs" />
+    <Compile Include="Migrations\201802050846465_ExpiryDays.Designer.cs">
+      <DependentUpon>201802050846465_ExpiryDays.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\CompanyMap.cs" />
     <Compile Include="Model\DataEntity.cs" />
@@ -184,6 +188,7 @@
     <Compile Include="View\CompanyView.xaml.cs">
       <DependentUpon>CompanyView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GrayoutImageBehavior.cs" />
     <Compile Include="View\HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>
@@ -245,6 +250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711231250235_CompnayNameRequired.resx">
       <DependentUpon>201711231250235_CompnayNameRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802050846465_ExpiryDays.resx">
+      <DependentUpon>201802050846465_ExpiryDays.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

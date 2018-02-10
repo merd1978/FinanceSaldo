@@ -58,7 +58,7 @@ namespace FinanceSaldo.ViewModel
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
         }
 
-        string IDataErrorInfo.this[string columnName]
+        public string this[string columnName]
         {
             get
             {

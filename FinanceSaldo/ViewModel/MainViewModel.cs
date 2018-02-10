@@ -39,7 +39,7 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand RemoveCompanyCommand { get; set; }
         private void ExecuteRemoveCompanyCommand()
         {
-            if (SelectedItem == null) return;
+            //if (SelectedItem == null) return;
             MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedItem.Company.Name + "?", "Подтверждение удаления",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
@@ -50,6 +50,10 @@ namespace FinanceSaldo.ViewModel
                 TabCollection.Remove(item.InvoiceViewModel);
                 CompanyList.RemoveAt(index);
             }
+        }
+        private bool CanExecuteRemoveCompanyCommand()
+        {
+            return SelectedItem != null;
         }
 
         public RelayCommand<TabViewModelBase> CloseTabCommand { get; set; }
@@ -101,6 +105,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _selectedItem, value);
                 if (value != null) ExecuteOpenCompanyTabCommand();
+                RemoveCompanyCommand.RaiseCanExecuteChanged();
             } 
         }
 
@@ -149,7 +154,7 @@ namespace FinanceSaldo.ViewModel
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
-            RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand);
+            RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand, CanExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<TabViewModelBase>(ExecuteCloseTabCommand);
             OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
 
