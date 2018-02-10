@@ -16,7 +16,7 @@ namespace FinanceSaldo.Model
             set
             {
                 Set(ref _date, value);
-                RaisePropertyChanged("ExpiryDate");
+                RaisePropertyChanged(nameof(ExpiryDate));
             }
         }
         public decimal Debit { get; set; }
@@ -28,7 +28,7 @@ namespace FinanceSaldo.Model
             set
             {
                 Set(ref _expiryDays, value);
-                RaisePropertyChanged("ExpiryDate");
+                RaisePropertyChanged(nameof(ExpiryDate));
             }
         }
 
@@ -36,10 +36,7 @@ namespace FinanceSaldo.Model
         public decimal CreditCash { get; set; }
 
         [NotMapped]
-        public DateTime ExpiryDate
-        {
-            get { return Date.AddDays(ExpiryDays); }
-        }
+        public DateTime ExpiryDate => Date.AddDays(ExpiryDays);
 
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; }
