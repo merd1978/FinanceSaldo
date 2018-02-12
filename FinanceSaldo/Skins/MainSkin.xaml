@@ -37,8 +37,22 @@
         <Setter Property="BorderBrush" Value="DarkGray" />
     </Style>
 
-    <Style x:Key="NumberCellStyle" TargetType="DataGridCell">
-        <Setter Property="HorizontalAlignment" Value="Right" />
+    <Style TargetType="{x:Type DataGridRow}">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="CornflowerBlue" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="LightSteelBlue"/>
+            <!--<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Aquamarine" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />--> 
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="CellAlignToRight" TargetType="TextBlock">
+        <Setter Property="TextAlignment" Value="Right"></Setter>
+    </Style>
+
+    <Style x:Key="CellAlignToCenter" TargetType="TextBlock">
+        <Setter Property="TextAlignment" Value="Center"></Setter>
     </Style>
 
 </ResourceDictionary>

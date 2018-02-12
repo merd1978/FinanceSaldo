@@ -7,36 +7,58 @@ namespace FinanceSaldo.Model
     public class Invoice : ObservableObject
     {
         public int InvoiceId { get; set; }
-        public string Name { get; set; }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => Set(ref _name, value);
+        }
+
         private DateTime _date;
         [Column(TypeName = "datetime2")]
         public DateTime Date
         {
             get => _date;
-            set
-            {
-                Set(ref _date, value);
-                RaisePropertyChanged(nameof(ExpiryDate));
-            }
+            set => Set(ref _date, value);
         }
-        public decimal Debit { get; set; }
-        public decimal Credit { get; set; }
+
+        private decimal _debit;
+        public decimal Debit
+        {
+            get => _debit;
+            set => Set(ref _debit, value);
+        }
+
+        private decimal _credit;
+        public decimal Credit
+        {
+            get => _credit;
+            set => Set(ref _credit, value);
+        }
+
         private int _expiryDays;
         public int ExpiryDays
         {
             get => _expiryDays;
-            set
-            {
-                Set(ref _expiryDays, value);
-                RaisePropertyChanged(nameof(ExpiryDate));
-            }
+            set => Set(ref _expiryDays, value);
         }
 
-        public decimal DebitCash { get; set; }
-        public decimal CreditCash { get; set; }
+        private decimal _debitCash;
+        public decimal DebitCash
+        {
+            get => _debitCash;
+            set => Set(ref _debitCash, value);
+        }
 
-        [NotMapped]
-        public DateTime ExpiryDate => Date.AddDays(ExpiryDays);
+        private decimal _creditCash;
+        public decimal CreditCash
+        {
+            get => _creditCash;
+            set => Set(ref _creditCash, value);
+        }
+
+        [NotMapped] public DateTime ExpiryDate => Date.AddDays(ExpiryDays);
 
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; }
@@ -45,6 +67,17 @@ namespace FinanceSaldo.Model
         {
             _expiryDays = 40;
             _date = DateTime.Now;
+        }
+
+        // Cloning copy constructor
+        public Invoice(Invoice cloneFrom)
+        {
+            Name = cloneFrom.Name;
+            Date = cloneFrom.Date;
+            Debit = cloneFrom.Debit;
+            Credit = cloneFrom.Credit;
+            ExpiryDays = cloneFrom.ExpiryDays;
+            CompanyId = cloneFrom.CompanyId;
         }
     }
 }

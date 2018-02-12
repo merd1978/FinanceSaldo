@@ -26,7 +26,7 @@
             <Expander Header="Редактор" ExpandDirection="Right" DockPanel.Dock="Left" MinWidth="30" IsExpanded="True">
                 <GroupBox Header="Накладная" VerticalAlignment="Top">
                     <StackPanel>
-                        <Grid>
+                        <Grid IsEnabled="{Binding IsInvoiceEditorEnabled}">
                             <Grid.Resources >
                                 <Style TargetType="TextBox" >
                                     <Setter Property="Margin" Value="5 5 5 5" />
@@ -65,18 +65,23 @@
                             <Label Grid.Column="0" Grid.Row="4" Content="Срок погашения" ToolTip="Срок погашения, дней"/>
                             <Label Grid.Column="0" Grid.Row="5" Content="Дата погашения"/>
 
-                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding EditorInvoice.Name}"/>
-                            <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding EditorInvoice.Date}"/>
-                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding EditorInvoice.Debit}"/>
-                            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding EditorInvoice.Credit}"/>
-                            <ComboBox Grid.Column="1" Grid.Row="4" Text="{Binding EditorInvoice.ExpiryDays}"
-                                      IsEditable="True" ItemsSource="{Binding ExpiryDaysList, Mode=OneWay}"/>
-                            <TextBlock Grid.Column="1" Grid.Row="5"  Text="{Binding EditorInvoice.ExpiryDate, StringFormat=d}"/>
+                            <TextBox Grid.Column="1" Grid.Row="0"
+                                     Text="{Binding SelectedInvoice.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker Grid.Column="1" Grid.Row="1" 
+                                        SelectedDate="{Binding SelectedInvoice.Date, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Column="1" Grid.Row="2"
+                                     Text="{Binding SelectedInvoice.Debit, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:n2\}}"/>
+                            <TextBox Grid.Column="1" Grid.Row="3"
+                                     Text="{Binding SelectedInvoice.Credit, UpdateSourceTrigger=PropertyChanged}"/>
+                            <ComboBox Grid.Column="1" Grid.Row="4" IsEditable="True" ItemsSource="{Binding ExpiryDaysList, Mode=OneWay}"
+                                      Text="{Binding SelectedInvoice.ExpiryDays, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="5" 
+                                       Text="{Binding SelectedInvoice.ExpiryDate, UpdateSourceTrigger=PropertyChanged, StringFormat=d}"/>
                         </Grid>
                         <StackPanel Margin="0 10 0 10" HorizontalAlignment="Center" Orientation="Horizontal">
                             <Button Content="Добавить" Margin="10 0 10 0" Command="{Binding AddCommand}"/>
-                            <Button Content="Обновить" Margin="10 0 10 0" Command="{Binding UpdateCommand}"/>
-                            <Button Content="Удалить" Margin="10 0 10 0" />
+                            <Button Content="Удалить" Margin="10 0 10 0" Command="{Binding DeleteCommand}"
+                                    IsEnabled="{Binding IsInvoiceEditorEnabled}"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -106,13 +111,13 @@
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Дебит" Binding="{Binding Debit, StringFormat=\{0:n2\}}"
-                                            ignore:CellStyle="{StaticResource NumberCellStyle}">
-                        </DataGridTextColumn>
+                                            ElementStyle="{StaticResource CellAlignToRight}"/>
                         <DataGridTextColumn Header="Кредит" Binding="{Binding Credit, StringFormat=\{0:n2\}}"
-                                            ignore:CellStyle="{StaticResource NumberCellStyle}">
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Срок погашения" Binding="{Binding ExpiryDays}"/>
-                        <DataGridTextColumn Header="Дата погашения" Binding="{Binding ExpiryDate, StringFormat=d}"/>
+                                            ElementStyle="{StaticResource CellAlignToRight}"/>
+                        <DataGridTextColumn Header="Срок погашения" Binding="{Binding ExpiryDays}"
+                                            ElementStyle="{StaticResource CellAlignToCenter}"/>
+                        <DataGridTextColumn Header="Дата погашения" Binding="{Binding ExpiryDate, StringFormat=d}"
+                                            ElementStyle="{StaticResource CellAlignToCenter}"/>
                         <DataGridTemplateColumn Header="Действия">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

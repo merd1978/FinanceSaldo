@@ -28,20 +28,28 @@ namespace FinanceSaldo.ViewModel
             set { Company.Name = value; RaisePropertyChanged(() => CompanyName); }
         }
 
-        //enable or disable save button
-        private bool _canSave;
-        public bool CanSave
-        {
-            get => _canSave;
-            set => Set(ref _canSave, value);
-        }
-
         public RelayCommand SaveCommand { get; set; }
         private void ExecuteSaveCommand()
         {
             _dataService.CreateCompany(Company);
             Messenger.Default.Send(Company);
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
+        }
+
+        private bool _canSave;
+        private bool CanSave
+        {
+            get => _canSave;
+            set
+            {
+                _canSave = value;
+                SaveCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private bool CanExecuteSaveCommand()
+        {
+            return CanSave;
         }
 
         public RelayCommand CloseTabCommand { get; set; }
@@ -54,7 +62,7 @@ namespace FinanceSaldo.ViewModel
         {
             _dataService = dataService;
 
-            SaveCommand = new RelayCommand(ExecuteSaveCommand);
+            SaveCommand = new RelayCommand(ExecuteSaveCommand, CanExecuteSaveCommand);
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
         }
 

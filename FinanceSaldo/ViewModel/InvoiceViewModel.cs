@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using FinanceSaldo.Model;
@@ -32,18 +33,11 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 Set(ref _selectedInvoice, value);
-                UpdateCommand.RaiseCanExecuteChanged();
+                IsInvoiceEditorEnabled = value != null;
             }
         }
 
-        private Invoice _editorInvoice;
-        public Invoice EditorInvoice
-        {
-            get => _editorInvoice;
-            set => Set(ref _editorInvoice, value);
-        }
-
-        ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "40", "30" };
+        private ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "40", "30" };
         public ObservableCollection<string> ExpiryDaysList
         {
             get => _expiryDaysList;
@@ -55,20 +49,17 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand AddCommand { get; set; }
         private void ExecuteAddCommand()
         {
-            Invoice.Add(EditorInvoice);
-            ExecuteSaveCommand();
-            EditorInvoice = new Invoice();
+            var newInvoice = new Invoice();
+            Invoice.Add(newInvoice);
+            SelectedInvoice = newInvoice;
             Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
-        public RelayCommand UpdateCommand { get; set; }
-        private void ExecuteUpdateCommand()
+        private bool _isInvoiceEditorEnabled;
+        public bool IsInvoiceEditorEnabled
         {
-        }
-
-        private bool CanExecuteUpdateCommand()
-        {
-            return SelectedInvoice != null ;
+            get => _isInvoiceEditorEnabled;
+            set => Set(ref _isInvoiceEditorEnabled, value);
         }
 
         public RelayCommand SaveCommand { get; set; }
@@ -118,16 +109,13 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-
         public InvoiceViewModel(IDataService dataService, CompanyList companyList) : base(companyList.Company.Name)
         {
             _dataService = dataService;
             CompanyList = companyList;
             Invoice = new ObservableCollection<Invoice>(companyList.Company.Invoice);
-            EditorInvoice = new Invoice();
 
             AddCommand = new RelayCommand(ExecuteAddCommand);
-            UpdateCommand = new RelayCommand(ExecuteUpdateCommand, CanExecuteUpdateCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
             DeleteCommand = new RelayCommand(ExecuteDeleteCommand);
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
