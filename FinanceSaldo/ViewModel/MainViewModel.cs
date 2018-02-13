@@ -40,15 +40,15 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteRemoveCompanyCommand()
         {
             //if (SelectedItem == null) return;
-            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedItem.Company.Name + "?", "Подтверждение удаления",
+            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedItem.Name + "?", "Подтверждение удаления",
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                CompanyList item = SelectedItem;
+                Company item = SelectedItem;
                 int index = SelectedIndex;
-                RemoveCompany(item.Company);
+                RemoveCompany(item);
                 TabCollection.Remove(item.InvoiceViewModel);
-                CompanyList.RemoveAt(index);
+                Company.RemoveAt(index);
             }
         }
         private bool CanExecuteRemoveCompanyCommand()
@@ -61,13 +61,13 @@ namespace FinanceSaldo.ViewModel
         {
             if (viewModel is InvoiceViewModel invoiceViewModel)
             {
-                int indx = CompanyList.IndexOf(invoiceViewModel.CompanyList);
+                int indx = Company.IndexOf(invoiceViewModel.Company);
                 if (indx == -1)
                 {
                     //error company not found
                     return;
                 }
-                CompanyList[indx].InvoiceViewModel = null;
+                Company[indx].InvoiceViewModel = null;
             }
             TabCollection.Remove(viewModel);
         }
@@ -75,12 +75,12 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand OpenCompanyTabCommand { get; set; }
         private void ExecuteOpenCompanyTabCommand()
         {
-            InvoiceViewModel invoiceViewModel = CompanyList[SelectedIndex].InvoiceViewModel;
+            InvoiceViewModel invoiceViewModel = Company[SelectedIndex].InvoiceViewModel;
             if (invoiceViewModel == null)
             {
                 invoiceViewModel = new InvoiceViewModel(_dataService, SelectedItem);
                 TabCollection.Add(invoiceViewModel);
-                CompanyList[SelectedIndex].InvoiceViewModel = invoiceViewModel;
+                Company[SelectedIndex].InvoiceViewModel = invoiceViewModel;
                 SelectedTabIndex = TabCollection.Count - 1;
             }
             else
@@ -90,15 +90,15 @@ namespace FinanceSaldo.ViewModel
         }
         #endregion
 
-        ObservableCollection<CompanyList> _companyList;
-        public ObservableCollection<CompanyList> CompanyList
+        ObservableCollection<Company> _company;
+        public ObservableCollection<Company> Company
         {
-            get => _companyList;
-            set => Set(ref _companyList, value);
+            get => _company;
+            set => Set(ref _company, value);
         }
 
-        private CompanyList _selectedItem;
-        public CompanyList SelectedItem
+        private Company _selectedItem;
+        public Company SelectedItem
         {
             get => _selectedItem;
             set
@@ -132,7 +132,7 @@ namespace FinanceSaldo.ViewModel
 
                 if (TabCollection[value] is InvoiceViewModel invoiceViewModel)
                 {
-                    SelectedIndex = CompanyList.IndexOf(invoiceViewModel.CompanyList);
+                    SelectedIndex = Company.IndexOf(invoiceViewModel.Company);
                 }
                 else
                 {
@@ -164,7 +164,7 @@ namespace FinanceSaldo.ViewModel
 
         public void AddCompany(Company company)
         {
-            CompanyList.Add(new CompanyList {Company = company});
+            Company.Add(new Company());
         }
 
         public void NotifyMe(NotificationMessage notificationMessage)
@@ -180,7 +180,7 @@ namespace FinanceSaldo.ViewModel
 
         public void GetCompany()
         {
-            CompanyList = new ObservableCollection<CompanyList>();
+            Company = new ObservableCollection<Company>();
             _dataService.GetCompany((items, error) =>
             {
                 if (error != null)
@@ -188,7 +188,7 @@ namespace FinanceSaldo.ViewModel
                     // Get Company list error
                     return;
                 }
-                CompanyList = items;
+                Company = items;
             });
         }
 

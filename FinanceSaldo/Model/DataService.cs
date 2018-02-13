@@ -14,13 +14,10 @@ namespace FinanceSaldo.Model
             _context = new DataEntity();
             _context.Database.CreateIfNotExists();
         }
-        public void GetCompany(Action<ObservableCollection<CompanyList>, Exception> callback)
+        public void GetCompany(Action<ObservableCollection<Company>, Exception> callback)
         {
-            var query = _context.Company.Select(m => new CompanyList
-            {
-                Company = m
-            });
-            callback(new ObservableCollection<CompanyList>(query), null);
+            var query = _context.Company;
+            callback(new ObservableCollection<Company>(query), null);
         }
 
         public void CreateCompany(Company company)

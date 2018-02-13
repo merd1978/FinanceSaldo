@@ -7,9 +7,9 @@ namespace FinanceSaldo.Design
 {
     public class DesignDataService : IDataService
     {
-        public void GetCompany(Action<ObservableCollection<CompanyList>, Exception> callback)
+        public void GetCompany(Action<ObservableCollection<Company>, Exception> callback)
         {
-            var designCompany = new ObservableCollection<CompanyList>();
+            var designCompany = new ObservableCollection<Company>();
             for (int index = 0; index < 15; index++)
             {
                 var company = new Company
@@ -18,7 +18,7 @@ namespace FinanceSaldo.Design
                     Description = "Description" + index,
                     Saldo = 1200.55m
                 };
-                designCompany.Add(new CompanyList{Company = company});
+                designCompany.Add(company);
             }
             callback(designCompany, null);
         }

@@ -12,11 +12,11 @@ namespace FinanceSaldo.ViewModel
     {
         private readonly IDataService _dataService;
 
-        private CompanyList _сompanyList;
-        public CompanyList CompanyList
+        private Company _сompany;
+        public Company Company
         {
-            get => _сompanyList;
-            set => Set(ref _сompanyList, value);
+            get => _сompany;
+            set => Set(ref _сompany, value);
         }
 
         ObservableCollection<Invoice> _invoice;
@@ -65,8 +65,7 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand SaveCommand { get; set; }
         private void ExecuteSaveCommand()
         {
-            CompanyList.Company.Invoice = Invoice;
-            _dataService.UpdateCompany(CompanyList.Company);
+            _dataService.UpdateCompany(Company);
             Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
@@ -109,11 +108,11 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-        public InvoiceViewModel(IDataService dataService, CompanyList companyList) : base(companyList.Company.Name)
+        public InvoiceViewModel(IDataService dataService, Company company) : base(company.Name)
         {
             _dataService = dataService;
-            CompanyList = companyList;
-            Invoice = new ObservableCollection<Invoice>(companyList.Company.Invoice);
+            Company = company;
+            Invoice = company.Invoice;
 
             AddCommand = new RelayCommand(ExecuteAddCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);

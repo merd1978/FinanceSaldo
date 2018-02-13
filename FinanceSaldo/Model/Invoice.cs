@@ -68,16 +68,5 @@ namespace FinanceSaldo.Model
             _expiryDays = 40;
             _date = DateTime.Now;
         }
-
-        // Cloning copy constructor
-        public Invoice(Invoice cloneFrom)
-        {
-            Name = cloneFrom.Name;
-            Date = cloneFrom.Date;
-            Debit = cloneFrom.Debit;
-            Credit = cloneFrom.Credit;
-            ExpiryDays = cloneFrom.ExpiryDays;
-            CompanyId = cloneFrom.CompanyId;
-        }
     }
 }
