@@ -150,7 +150,7 @@ namespace FinanceSaldo.ViewModel
 
             _dataService = dataService;
             GetCompany();
-            
+
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
@@ -174,6 +174,9 @@ namespace FinanceSaldo.ViewModel
             {
                 case "CloseCurrentTab":
                     ExecuteCloseTabCommand(TabCollection[SelectedTabIndex]);
+                    break;
+                case "TotalSaldoChanged":
+                    SelectedItem.RaisePropertyChanged(nameof(SelectedItem.TotalSaldo));
                     break;
             }
         }

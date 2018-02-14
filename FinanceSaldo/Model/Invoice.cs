@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace FinanceSaldo.Model
 {
@@ -27,21 +28,33 @@ namespace FinanceSaldo.Model
         public decimal Debit
         {
             get => _debit;
-            set => Set(ref _debit, value);
+            set
+            {
+                Set(ref _debit, value);
+                Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+            }
         }
 
         private decimal _credit;
         public decimal Credit
         {
             get => _credit;
-            set => Set(ref _credit, value);
+            set
+            {
+                Set(ref _credit, value);
+                Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+            }
         }
 
         private int _expiryDays;
         public int ExpiryDays
         {
             get => _expiryDays;
-            set => Set(ref _expiryDays, value);
+            set
+            {
+                Set(ref _expiryDays, value);
+                RaisePropertyChanged(nameof(ExpiryDate));
+            }
         }
 
         private decimal _debitCash;
@@ -58,7 +71,8 @@ namespace FinanceSaldo.Model
             set => Set(ref _creditCash, value);
         }
 
-        [NotMapped] public DateTime ExpiryDate => Date.AddDays(ExpiryDays);
+        [NotMapped]
+        public DateTime ExpiryDate => Date.AddDays(ExpiryDays);
 
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; }

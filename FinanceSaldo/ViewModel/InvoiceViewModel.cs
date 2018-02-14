@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using FinanceSaldo.Model;
@@ -52,7 +51,6 @@ namespace FinanceSaldo.ViewModel
             var newInvoice = new Invoice();
             Invoice.Add(newInvoice);
             SelectedInvoice = newInvoice;
-            Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
         private bool _isInvoiceEditorEnabled;
@@ -66,7 +64,6 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteSaveCommand()
         {
             _dataService.UpdateCompany(Company);
-            Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
         public RelayCommand DeleteCommand { get; set; }
@@ -74,7 +71,6 @@ namespace FinanceSaldo.ViewModel
         {
             _dataService.RemoveInvoice(SelectedInvoice);
             Invoice.Remove(SelectedInvoice);
-            Messenger.Default.Send(new NotificationMessage("UpdateCompany"));
         }
 
         public RelayCommand CloseTabCommand { get; set; }
