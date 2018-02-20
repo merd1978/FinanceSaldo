@@ -38,8 +38,8 @@ namespace FinanceSaldo.ViewModel
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
-        public RelayCommand RemoveCompanyCommand { get; set; }
-        private void ExecuteRemoveCompanyCommand()
+        public RelayCommand DialogRemoveCompanyCommand { get; set; }
+        private void ExecuteDialogRemoveCompanyCommand()
         {
             if (SelectedItem == null) return;
 
@@ -49,24 +49,29 @@ namespace FinanceSaldo.ViewModel
                 ButtonsStyle = DialogButtonStyle.YesNo,
                 YesButtonContent = "Да",
                 NoButtonContent = "Нет",
-                //ExitDialogCommand = DialogCloseCommand,
+                ExitDialogCommand = RemoveCompanyCommand,
                 ShowCopyToClipboardButton = false,
                 Message = $"Удалить {SelectedItem.Name}?",
-                Title = "Подтверждение удаления"
+                Title = "Подтверждение удаления",
             });
-
-            //if (dialogResult == MessageBoxResult.Yes)
-            //{
-            //    //Company item = SelectedItem;
-            //    //int index = SelectedIndex;
-            //    //RemoveCompany(item);
-            //    //TabCollection.Remove(item.InvoiceViewModel);
-            //    //Company.RemoveAt(index);
-            //}
         }
-        private bool CanExecuteRemoveCompanyCommand()
+        private bool CanExecuteDialogRemoveCompanyCommand()
         {
             return SelectedItem != null;
+        }
+
+        public RelayCommand<DialogResult> RemoveCompanyCommand { get; set; }
+        private void ExecuteRemoveCompanyCommand(DialogResult result)
+        {
+            DialogManager.HideVisibleDialog();
+            if (result == SimpleDialogs.Enumerators.DialogResult.Yes)
+            {
+                Company company = SelectedItem;
+                int index = SelectedIndex;
+                RemoveCompany(company);
+                TabCollection.Remove(company.InvoiceViewModel);
+                Company.RemoveAt(index);
+            }
         }
 
         public RelayCommand<TabViewModelBase> CloseTabCommand { get; set; }
@@ -118,7 +123,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _selectedItem, value);
                 if (value != null) ExecuteOpenCompanyTabCommand();
-                RemoveCompanyCommand.RaiseCanExecuteChanged();
+                DialogRemoveCompanyCommand.RaiseCanExecuteChanged();
             } 
         }
 
@@ -164,10 +169,17 @@ namespace FinanceSaldo.ViewModel
             _dataService = dataService;
             GetCompany();
 
+            //DialogCloseCommand = new RelayCommand<DialogResult>((result) =>
+            //{
+            //    DialogResult = result;
+            //    DialogManager.HideVisibleDialog();
+            //});
+
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
-            RemoveCompanyCommand = new RelayCommand(ExecuteRemoveCompanyCommand, CanExecuteRemoveCompanyCommand);
+            DialogRemoveCompanyCommand = new RelayCommand(ExecuteDialogRemoveCompanyCommand, CanExecuteDialogRemoveCompanyCommand);
+            RemoveCompanyCommand = new RelayCommand<DialogResult>(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<TabViewModelBase>(ExecuteCloseTabCommand);
             OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
 
@@ -177,7 +189,7 @@ namespace FinanceSaldo.ViewModel
 
         public void AddCompany(Company company)
         {
-            Company.Add(new Company());
+            Company.Add(company);
         }
 
         public void NotifyMe(NotificationMessage notificationMessage)

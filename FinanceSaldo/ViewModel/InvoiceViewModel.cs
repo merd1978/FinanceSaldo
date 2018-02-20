@@ -43,7 +43,7 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _expiryDaysList, value);
         }
 
-        public string SearchText { get; set; }
+        public string FilterText { get; set; }
 
         public RelayCommand AddCommand { get; set; }
         private void ExecuteAddCommand()

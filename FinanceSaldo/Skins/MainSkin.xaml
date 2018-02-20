@@ -28,8 +28,27 @@
         <Setter Property="Height" Value="24"/>
         <Setter Property="Width" Value="80"/>
         <Setter Property="MinWidth" Value="75"></Setter>
-        <Setter Property="Background" Value="DarkSlateBlue"></Setter>
-        <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+        <Setter Property="Background" Value="DarkGray"></Setter>
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="DarkSlateBlue"/>
+                <Setter Property="Foreground" Value="WhiteSmoke" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Background" Value="#FFF4F4F4"/>
+                <Setter Property="Foreground" Value="#FF838383"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type DataGrid}">

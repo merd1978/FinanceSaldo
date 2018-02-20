@@ -15,7 +15,7 @@ namespace FinanceSaldo.Model
         public string Description { get; set; }
         public decimal Saldo { get; set; }
 
-        public virtual ObservableCollection<Invoice> Invoice { get; set; }
+        public virtual ObservableCollection<Invoice> Invoice { get; private set; }
 
         [NotMapped]
         public int TotalSaldo
@@ -25,5 +25,10 @@ namespace FinanceSaldo.Model
 
         [NotMapped]
         public InvoiceViewModel InvoiceViewModel { get; set; }
+
+        public Company()
+        {
+            Invoice = new ObservableCollection<Invoice>();
+        }
     }
 }
