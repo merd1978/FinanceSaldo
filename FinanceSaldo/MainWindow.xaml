@@ -6,6 +6,8 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:view="clr-namespace:FinanceSaldo.View"
         xmlns:viewModel="clr-namespace:FinanceSaldo.ViewModel"
+        xmlns:dialogs="clr-namespace:SimpleDialogs;assembly=SimpleDialogs"
+        dialogs:DialogManager.DefaultDialogContainer="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d ignore"
         Height="700"
         Width="1300"
@@ -17,6 +19,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/SimpleDialogs;component/Controls/Design/SimpleDialogs.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

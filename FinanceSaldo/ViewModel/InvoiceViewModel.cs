@@ -71,6 +71,7 @@ namespace FinanceSaldo.ViewModel
         {
             _dataService.RemoveInvoice(SelectedInvoice);
             Invoice.Remove(SelectedInvoice);
+            Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
         }
 
         public RelayCommand CloseTabCommand { get; set; }

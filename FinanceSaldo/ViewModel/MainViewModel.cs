@@ -2,9 +2,11 @@
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using SimpleDialogs;
+using SimpleDialogs.Controls;
+using SimpleDialogs.Enumerators;
 
 namespace FinanceSaldo.ViewModel
 {
@@ -39,17 +41,28 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand RemoveCompanyCommand { get; set; }
         private void ExecuteRemoveCompanyCommand()
         {
-            //if (SelectedItem == null) return;
-            MessageBoxResult messageBoxResult = MessageBox.Show("Удалить " + SelectedItem.Name + "?", "Подтверждение удаления",
-                MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
-            if (messageBoxResult == MessageBoxResult.Yes)
+            if (SelectedItem == null) return;
+
+            DialogManager.ShowDialog(new AlertDialog()
             {
-                Company item = SelectedItem;
-                int index = SelectedIndex;
-                RemoveCompany(item);
-                TabCollection.Remove(item.InvoiceViewModel);
-                Company.RemoveAt(index);
-            }
+                AlertLevel = AlertLevel.Warning,
+                ButtonsStyle = DialogButtonStyle.YesNo,
+                YesButtonContent = "Да",
+                NoButtonContent = "Нет",
+                //ExitDialogCommand = DialogCloseCommand,
+                ShowCopyToClipboardButton = false,
+                Message = $"Удалить {SelectedItem.Name}?",
+                Title = "Подтверждение удаления"
+            });
+
+            //if (dialogResult == MessageBoxResult.Yes)
+            //{
+            //    //Company item = SelectedItem;
+            //    //int index = SelectedIndex;
+            //    //RemoveCompany(item);
+            //    //TabCollection.Remove(item.InvoiceViewModel);
+            //    //Company.RemoveAt(index);
+            //}
         }
         private bool CanExecuteRemoveCompanyCommand()
         {
