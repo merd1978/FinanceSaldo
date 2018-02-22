@@ -64,14 +64,12 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteRemoveCompanyCommand(DialogResult result)
         {
             DialogManager.HideVisibleDialog();
-            if (result == SimpleDialogs.Enumerators.DialogResult.Yes)
-            {
-                Company company = SelectedItem;
-                int index = SelectedIndex;
-                RemoveCompany(company);
-                TabCollection.Remove(company.InvoiceViewModel);
-                Company.RemoveAt(index);
-            }
+            if (result != DialogResult.Yes) return;
+            Company company = SelectedItem;
+            int index = SelectedIndex;
+            RemoveCompany(company);
+            TabCollection.Remove(company.InvoiceViewModel);
+            Company.RemoveAt(index);
         }
 
         public RelayCommand<TabViewModelBase> CloseTabCommand { get; set; }
