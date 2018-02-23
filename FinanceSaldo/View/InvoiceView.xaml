@@ -99,14 +99,13 @@
                 <DockPanel Grid.Row="0" Margin="5 0 0 5" Height="25">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBox Width="170" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}">
+                        <!--<Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}">
                             <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" >
                                 <Path Fill="Green" Stretch="Uniform" Style="{StaticResource CleanIcon}"/>
                             </ContentControl>
-                        </Button>
-                        <!--<Button Command="{Binding ResetFilterTextCommand}">
-                            <Image Source="/Image/Dollar.ico"></Image>
                         </Button>-->
+                        <Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}">
+                        </Button>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
