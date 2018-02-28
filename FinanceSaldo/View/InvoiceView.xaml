@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock TextWrapping="Wrap" Text="Список накладных" FontWeight="Bold" FontSize="16" Margin="0 0 10 0"/>
-            <TextBlock Text="{Binding CompanyList.Company.Name}" FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="{Binding Company.Name}" FontWeight="Bold" FontSize="16"/>
         </StackPanel>
         
         <DockPanel Grid.Row="1">
@@ -23,7 +23,7 @@
                     <StackPanel>
                         <Grid IsEnabled="{Binding IsInvoiceEditorEnabled}">
                             <Grid.Resources >
-                                <Style TargetType="TextBox" >
+                                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                                     <Setter Property="Margin" Value="5 5 5 5" />
                                 </Style>
                                 <Style TargetType="DatePicker" >
@@ -35,7 +35,6 @@
                                 <Style TargetType="TextBlock" >
                                     <Setter Property="Margin" Value="5 5 5 5" />
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <!--<Setter Property="HorizontalAlignment" Value="Center"/>-->
                                 </Style>
                                 <Style TargetType="Label" >
                                     <Setter Property="Margin" Value="5 5 5 5" />
@@ -79,11 +78,6 @@
                             <TextBlock Grid.Column="1" Grid.Row="5" 
                                        Text="{Binding SelectedInvoice.ExpiryDate, UpdateSourceTrigger=PropertyChanged, StringFormat=d}"/>
                         </Grid>
-                        <StackPanel Margin="0 10 0 10" HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Button Content="Добавить" Margin="10 0 10 0" Command="{Binding AddCommand}"/>
-                            <Button Content="Удалить" Margin="10 0 10 0" Command="{Binding DialogDeleteCommand}"
-                                    IsEnabled="{Binding IsInvoiceEditorEnabled}"/>
-                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
             </Expander>
@@ -99,17 +93,12 @@
                 <DockPanel Grid.Row="0" Margin="5 0 0 5" Height="25">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBox Width="170" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"/>
-                        <!--<Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}">
-                            <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" >
-                                <Path Fill="Green" Stretch="Uniform" Style="{StaticResource CleanIcon}"/>
-                            </ContentControl>
-                        </Button>-->
-                        <Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}">
-                        </Button>
+                        <Button Command="{Binding ResetFilterTextCommand}" Style="{StaticResource ToolBarButton}" ToolTip="Очистить"
+                                Background="Green" Tag="{StaticResource AppBarClean}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Text="C"></TextBlock>
+                    <TextBlock Text="C" Margin="0 0 5 0" VerticalAlignment="Center"></TextBlock>
                     <DatePicker SelectedDate="{Binding FilterStartDate, UpdateSourceTrigger=PropertyChanged}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type Button}">
@@ -117,7 +106,7 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
-                    <TextBlock Text="По"></TextBlock>
+                        <TextBlock Text="По" Margin="5 0 5 0" VerticalAlignment="Center"></TextBlock>
                     <DatePicker SelectedDate="{Binding FilterEndDate, UpdateSourceTrigger=PropertyChanged}">
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type Button}">
@@ -125,23 +114,23 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
-                    <TextBlock Text="За"></TextBlock>
+                        <TextBlock Text="За" Margin="5 0 5 0" VerticalAlignment="Center"></TextBlock>
                     <ComboBox Text="{Binding FilterDateDif, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding FilterDateDifList, Mode=OneWay}"
                               IsEditable="true" />
-                    <TextBlock Text="дней"></TextBlock>
+                    <TextBlock Text="дней" VerticalAlignment="Center"/>
                     </StackPanel>
                 </DockPanel>
 
                 <DataGrid Grid.Row="1" x:Name="DgInvoice"  ItemsSource="{Binding InvoiceView}" SelectedItem="{Binding SelectedInvoice}" DockPanel.Dock="Left"
                         AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="№ Накладной" Width="175" 
-                                        Binding="{Binding Name}">
+                        <DataGridTextColumn Header="№ Накладной" Width="175"
+                                            Binding="{Binding Name}">
                         </DataGridTextColumn>
                         <DataGridTemplateColumn Header="Дата" CanUserSort="True" SortMemberPath="Date">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Date, StringFormat=d}"/>
+                                    <TextBlock Text="{Binding Date, StringFormat=d}" Margin="5 0 5 0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -164,7 +153,7 @@
                                     <Button Background="White" ToolTip="Удалить запись"
                                         Command="{Binding ElementName=DgInvoice, Path=DataContext.DialogDeleteCommand}">
                                         <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" MaxHeight="16">
-                                            <Path Fill="CornflowerBlue" Stretch="Uniform" Style="{StaticResource DeleteIcon}"/>
+                                            <Path Fill="CornflowerBlue" Stretch="Uniform" Style="{StaticResource AppBarDelete}"/>
                                         </ContentControl>
                                         <Button.Style>
                                             <Style x:Name="ButtonVisibility">
@@ -189,6 +178,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Margin="0 10 0 10" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Content="Новая" Margin="10 0 10 0" Command="{Binding NewCommand}"/>
                     <Button Content="Сохранить" Margin="10 0 10 0" Command="{Binding SaveCommand}"/>
                     <Button Content="Печать" Margin="10 0 10 0" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=DgInvoice}"/>
                     <Button Content="Отмена" Margin="10 0 10 0" Command="{Binding CloseTabCommand}"/>

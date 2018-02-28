@@ -15,17 +15,34 @@
             </Grid.RowDefinitions>
             <ToolBar x:Name="TbMain" Grid.Row="0" Grid.Column="0" ToolBarTray.IsLocked="True" Background="Transparent" OverflowMode="Never"
                      Loaded="TbMain_Loaded">
-                <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Список Организаций" FontSize="14" Margin="0 0 5 0"
+                <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Список Организаций" FontSize="16" Margin="0 0 5 0"
                            VerticalAlignment="Center"/>
-                <Button Command="{Binding NewCompanyCommand}" ToolTip="Добавить Организацию" Width="20" Height="20">
-                    <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Path Fill="Chartreuse" Stretch="Uniform" Style="{StaticResource AddIcon}"/>
-                    </ContentControl>
+                <Button Command="{Binding NewCompanyCommand}" Style="{StaticResource ToolBarButton}" ToolTip="Добавить Организацию"
+                        Background="Chartreuse" Tag="{StaticResource AppBarAdd}"
+                        Width="24" Height="24" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="Padding" Value="2 2 2 2"></Setter>
+                        </Style>
+                    </Button.Resources>
                 </Button>
-                <Button Command="{Binding DialogRemoveCompanyCommand}" ToolTip="Удалить Организацию" Width="20" Height="20">
-                    <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" >
-                        <Path Fill="DarkRed" Stretch="Uniform" Style="{StaticResource DeleteIcon}"/>
-                    </ContentControl>
+                <Button Command="{Binding EditCompanyCommand}" Style="{StaticResource ToolBarButton}" ToolTip="Редактировать Организацию"
+                        Background="CornflowerBlue" Tag="{StaticResource AppBarEdit}"
+                        Width="24" Height="24" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="Padding" Value="2 2 2 2"></Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button Command="{Binding DialogRemoveCompanyCommand}" Style="{StaticResource ToolBarButton}" ToolTip="Удалить Организацию"
+                        Background="DarkRed" Tag="{StaticResource AppBarDelete}"
+                        Width="24" Height="24">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="Padding" Value="2 2 2 2"></Setter>
+                        </Style>
+                    </Button.Resources>
                 </Button>
             </ToolBar>
             <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0" AlternationCount="2"

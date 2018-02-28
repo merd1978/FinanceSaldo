@@ -10,8 +10,8 @@ namespace FinanceSaldo.Model
     public class Company : ObservableObject
     {
         public int CompanyId { get; set; }
-        [Required(AllowEmptyStrings  = false, ErrorMessage = "Название не может быть пустым")]
-        public string Name { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Название не может быть пустым")]
+        public string Name { get; set; } = "Новая";
         public string Description { get; set; }
         public decimal Saldo { get; set; }
 

@@ -116,8 +116,8 @@ namespace FinanceSaldo.ViewModel
         #endregion
 
         #region Commands
-        public RelayCommand AddCommand { get; set; }
-        private void ExecuteAddCommand()
+        public RelayCommand NewCommand { get; set; }
+        private void ExecuteNewCommand()
         {
             var newInvoice = new Invoice();
             Invoice.Add(newInvoice);
@@ -203,7 +203,7 @@ namespace FinanceSaldo.ViewModel
             InvoiceView.Filter = OnFilterInvoice;
             FilterDateDif = 30;
 
-            AddCommand = new RelayCommand(ExecuteAddCommand);
+            NewCommand = new RelayCommand(ExecuteNewCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
             DialogDeleteCommand = new RelayCommand(ExecuteDialogDeleteCommand);
             DeleteCommand = new RelayCommand<DialogResult>(ExecuteDeleteCommand);

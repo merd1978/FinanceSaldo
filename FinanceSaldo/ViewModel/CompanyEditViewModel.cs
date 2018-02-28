@@ -13,7 +13,7 @@ namespace FinanceSaldo.ViewModel
     {
         private readonly IDataService _dataService;
 
-        private Company _company = new Company();
+        private Company _company;
         public Company Company
         {
             get => _company;
@@ -57,9 +57,10 @@ namespace FinanceSaldo.ViewModel
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
-        public CompanyEditViewModel(IDataService dataService) : base("Новая")
+        public CompanyEditViewModel(IDataService dataService, Company company) : base(company.Name)
         {
             _dataService = dataService;
+            Company = company;
 
             SaveCommand = new RelayCommand(ExecuteSaveCommand, CanExecuteSaveCommand);
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);

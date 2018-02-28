@@ -19,15 +19,19 @@ namespace FinanceSaldo.ViewModel
 
         #region Commands
         public RelayCommand EditCompanyCommand { get; set; }
+        private bool CanExecuteEditCompanyCommand()
+        {
+            return SelectedItem != null;
+        }
         private void ExecuteEditCompanyCommand()
         {
-            //CurrentView = View.CompanyView;
+            TabCollection.Add(new CompanyEditViewModel(_dataService, SelectedItem));
         }
 
         public RelayCommand NewCompanyCommand { get; set; }
         private void ExecuteNewCompanyCommand()
         {
-            TabCollection.Add(new CompanyEditViewModel(_dataService));
+            TabCollection.Add(new CompanyEditViewModel(_dataService, new Company()));
             SelectedTabIndex = TabCollection.Count - 1;
         }
 
@@ -39,6 +43,10 @@ namespace FinanceSaldo.ViewModel
         }
 
         public RelayCommand DialogRemoveCompanyCommand { get; set; }
+        private bool CanExecuteDialogRemoveCompanyCommand()
+        {
+            return SelectedItem != null;
+        }
         private void ExecuteDialogRemoveCompanyCommand()
         {
             if (SelectedItem == null) return;
@@ -54,10 +62,6 @@ namespace FinanceSaldo.ViewModel
                 Message = $"Удалить {SelectedItem.Name}?",
                 Title = "Подтверждение удаления",
             });
-        }
-        private bool CanExecuteDialogRemoveCompanyCommand()
-        {
-            return SelectedItem != null;
         }
 
         public RelayCommand<DialogResult> RemoveCompanyCommand { get; set; }
@@ -122,6 +126,7 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _selectedItem, value);
                 if (value != null) ExecuteOpenCompanyTabCommand();
                 DialogRemoveCompanyCommand.RaiseCanExecuteChanged();
+                EditCompanyCommand.RaiseCanExecuteChanged();
             } 
         }
 
@@ -173,7 +178,7 @@ namespace FinanceSaldo.ViewModel
             //    DialogManager.HideVisibleDialog();
             //});
 
-            EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand);
+            EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand, CanExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
             DialogRemoveCompanyCommand = new RelayCommand(ExecuteDialogRemoveCompanyCommand, CanExecuteDialogRemoveCompanyCommand);

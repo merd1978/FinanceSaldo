@@ -46,12 +46,11 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding TabName}"/>
-                        <Button Content="X" Cursor="Hand" DockPanel.Dock="Right" Focusable="False"
-                                FontFamily="Courier" FontSize="12" FontWeight="Bold"  Margin="5,0,0,0" Padding="0"
-                                Foreground="Black" Background="Transparent" BorderThickness="0"
-                                VerticalContentAlignment="Bottom" MinWidth="16" Width="16" Height="16" 
+                        <Button Width="16" Height="16" MinWidth="16" MinHeight="16" Margin="0 0 0 0"
+                                Template="{StaticResource ResourceKey=CloseTabButtonTemplate}"
                                 Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
-                                CommandParameter="{Binding}"/>
+                                CommandParameter="{Binding}">
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
