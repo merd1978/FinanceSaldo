@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,10 +13,11 @@ using GalaSoft.MvvmLight.Messaging;
 using SimpleDialogs;
 using SimpleDialogs.Controls;
 using SimpleDialogs.Enumerators;
+using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace FinanceSaldo.ViewModel
 {
-    public class InvoiceViewModel : TabViewModelBase
+    public class InvoiceViewModel : TabViewModelBase, IDataErrorInfo
     {
         private readonly IDataService _dataService;
 
@@ -23,7 +28,7 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _сompany, value);
         }
 
-        ObservableCollection<Invoice> _invoice;
+        private ObservableCollection<Invoice> _invoice;
         public ObservableCollection<Invoice> Invoice
         {
             get => _invoice;
@@ -41,6 +46,27 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _selectedInvoice, value);
                 IsInvoiceEditorEnabled = value != null;
             }
+        }
+
+        private int _invoiceExpiryDays;
+        [Range(0, 999, ErrorMessage = "Срок должен быть от 1 до 999")]
+        public int InvoiceExpiryDays
+        {
+            get => _invoiceExpiryDays;
+            set
+            {
+                Set(ref _invoiceExpiryDays, value);
+
+                SelectedInvoice.ExpiryDays = value;
+                RaisePropertyChanged(() => SelectedInvoice.ExpiryDays);
+            }
+        }
+
+        private decimal _currentSaldo;
+        public decimal CurrentSaldo
+        {
+            get => Company.GetSaldo(FilterEndDate);
+            set => Set(ref _currentSaldo, value);
         }
 
         private ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "40", "30" };
@@ -83,6 +109,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterEndDate, value);
                 RaisePropertyChanged(nameof(FilterDateDif));
+                RaisePropertyChanged(nameof(CurrentSaldo));
                 InvoiceView.Refresh();
             }
         }
@@ -134,7 +161,7 @@ namespace FinanceSaldo.ViewModel
         public RelayCommand SaveCommand { get; set; }
         private void ExecuteSaveCommand()
         {
-            _dataService.UpdateCompany(Company);
+            _dataService.SaveChanges();
         }
 
         public RelayCommand DialogDeleteCommand { get; set; }
@@ -210,6 +237,46 @@ namespace FinanceSaldo.ViewModel
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
             PrintCommand = new RelayCommand<DataGrid>(ExecutePrintCommand);
             ResetFilterTextCommand = new RelayCommand(ExecuteResetFilterTextCommand, CanExecuteResetFilterTextCommand);
+
+            Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
         }
+
+        public void NotifyMe(NotificationMessage notificationMessage)
+        {
+            string notification = notificationMessage.Notification;
+            switch (notification)
+            {
+                case "CurrentSaldoChanged":
+                    RaisePropertyChanged(nameof(CurrentSaldo));
+                    break;
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                //string result = string.Empty;
+                //switch (columnName)
+                //{
+                //    case "Name": if (string.IsNullOrEmpty(Company.Name)) result = "Name is required!"; break;
+                //};
+                //return result;
+
+                var value = GetType().GetProperty(columnName)?.GetValue(this, null);
+                var results = new List<ValidationResult>();
+
+                var context = new ValidationContext(this, null, null) { MemberName = columnName };
+
+                if (!Validator.TryValidateProperty(value, context, results))
+                {
+                    return results.First().ErrorMessage;
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string Error => throw new NotImplementedException();
     }
 }

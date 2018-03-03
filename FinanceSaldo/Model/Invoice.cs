@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -37,6 +38,7 @@ namespace FinanceSaldo.Model
             {
                 Set(ref _debit, value);
                 Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+                Messenger.Default.Send(new NotificationMessage("CurrentSaldoChanged"));
             }
         }
 
@@ -48,18 +50,23 @@ namespace FinanceSaldo.Model
             {
                 Set(ref _credit, value);
                 Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+                Messenger.Default.Send(new NotificationMessage("CurrentSaldoChanged"));
             }
         }
 
         private int _expiryDays;
+        [Range(0, 999, ErrorMessage = "Срок должен быть от 1 до 999")]
         public int ExpiryDays
         {
             get => _expiryDays;
             set
             {
-                Set(ref _expiryDays, value);
-                RaisePropertyChanged(nameof(ExpiryDate));
-                RaisePropertyChanged(nameof(IsExpiry));
+                if (value >= 0 && value <= 999)
+                {
+                    Set(ref _expiryDays, value);
+                    RaisePropertyChanged(nameof(ExpiryDate));
+                    RaisePropertyChanged(nameof(IsExpiry));
+                }
             }
         }
 

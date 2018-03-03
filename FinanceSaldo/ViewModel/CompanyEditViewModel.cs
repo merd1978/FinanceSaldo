@@ -20,18 +20,40 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _company, value);
         }
 
+        public Company CompanyEdit { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Поле не может быть пустым")]
         public string CompanyName
         {
-            get => Company.Name;
-            set { Company.Name = value; RaisePropertyChanged(() => CompanyName); }
+            get => CompanyEdit.Name;
+            set
+            {
+                CompanyEdit.Name = value;
+                RaisePropertyChanged(() => CompanyName);
+            }
         }
 
         public RelayCommand SaveCommand { get; set; }
         private void ExecuteSaveCommand()
         {
-            _dataService.CreateCompany(Company);
-            Messenger.Default.Send(Company);
+            Company.Name = CompanyEdit.Name;
+            Company.Description = CompanyEdit.Description;
+            Company.Saldo = CompanyEdit.Saldo;
+
+            //add new record
+            if (Company.CompanyId == 0)
+            {
+                
+                Messenger.Default.Send(Company);
+            }
+            //edit existing record
+            else
+            {
+                Company.InvoiceViewModel.TabName = CompanyEdit.Name;
+            }
+
+            _dataService.InsertOrUpdateCompany(Company);
+
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
@@ -51,19 +73,25 @@ namespace FinanceSaldo.ViewModel
             return CanSave;
         }
 
-        public RelayCommand CloseTabCommand { get; set; }
-        private void ExecuteCloseTabCommand()
+        public RelayCommand CancelCommand { get; set; }
+        private void ExecuteCancelCommand()
         {
             Messenger.Default.Send(new NotificationMessage("CloseCurrentTab"));
         }
 
-        public CompanyEditViewModel(IDataService dataService, Company company) : base(company.Name)
+        public CompanyEditViewModel(IDataService dataService, Company company) : base(company.Name + " - реквизиты")
         {
             _dataService = dataService;
             Company = company;
+            CompanyEdit = new Company
+            {
+                Name = company.Name,
+                Description = company.Description,
+                Saldo = company.Saldo
+            };
 
             SaveCommand = new RelayCommand(ExecuteSaveCommand, CanExecuteSaveCommand);
-            CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
+            CancelCommand = new RelayCommand(ExecuteCancelCommand);
         }
 
         public string this[string columnName]

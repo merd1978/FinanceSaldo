@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
+using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using SimpleDialogs;
@@ -26,6 +28,7 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteEditCompanyCommand()
         {
             TabCollection.Add(new CompanyEditViewModel(_dataService, SelectedItem));
+            SelectedTabIndex = TabCollection.Count - 1;
         }
 
         public RelayCommand NewCompanyCommand { get; set; }
@@ -108,6 +111,34 @@ namespace FinanceSaldo.ViewModel
                 SelectedTabIndex = TabCollection.IndexOf(invoiceViewModel);
             }
         }
+
+        public RelayCommand<CancelEventArgs> DialogWindowCloseCommand { get; set; }
+        private void ExecuteDialogWindowCloseCommand(CancelEventArgs cancelEventArgs)
+        {
+            if (_dataService.HasUnsavedChanges())
+            {
+                DialogManager.ShowDialog(new AlertDialog()
+                {
+                    AlertLevel = AlertLevel.Warning,
+                    ButtonsStyle = DialogButtonStyle.YesNo,
+                    YesButtonContent = "Да",
+                    NoButtonContent = "Нет",
+                    ExitDialogCommand = WindowCloseCommand,
+                    ShowCopyToClipboardButton = false,
+                    Message = $"Вы хотите сохранить изменения?",
+                    Title = "Выход из приложения",
+                });
+                cancelEventArgs.Cancel = true;
+            }
+        }
+
+        public RelayCommand<DialogResult> WindowCloseCommand { get; set; }
+        private void ExecuteWindowCloseCommand(DialogResult dialogResult)
+        {
+            DialogManager.HideVisibleDialog();
+            if (dialogResult == DialogResult.Yes) _dataService.SaveChanges();
+            Application.Current.Shutdown();
+        }
         #endregion
 
         ObservableCollection<Company> _company;
@@ -172,12 +203,6 @@ namespace FinanceSaldo.ViewModel
             _dataService = dataService;
             GetCompany();
 
-            //DialogCloseCommand = new RelayCommand<DialogResult>((result) =>
-            //{
-            //    DialogResult = result;
-            //    DialogManager.HideVisibleDialog();
-            //});
-
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand, CanExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
@@ -185,6 +210,8 @@ namespace FinanceSaldo.ViewModel
             RemoveCompanyCommand = new RelayCommand<DialogResult>(ExecuteRemoveCompanyCommand);
             CloseTabCommand = new RelayCommand<TabViewModelBase>(ExecuteCloseTabCommand);
             OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
+            DialogWindowCloseCommand = new RelayCommand<CancelEventArgs>(ExecuteDialogWindowCloseCommand);
+            WindowCloseCommand = new RelayCommand<DialogResult>(ExecuteWindowCloseCommand);
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
             Messenger.Default.Register<Company>(this, AddCompany);
@@ -235,11 +262,11 @@ namespace FinanceSaldo.ViewModel
             });
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
+        //public override void Cleanup()
+        //{
+        //    // Clean up if needed
 
-        ////    base.Cleanup();
-        ////}
+        //    base.Cleanup();
+        //}
     }
 }

@@ -23,12 +23,17 @@ namespace FinanceSaldo.Design
             callback(designCompany, null);
         }
 
-        public void CreateCompany(Company company)
+        public void InsertOrUpdateCompany(Company company)
         {
         }
 
-        public void UpdateCompany(Company company)
+        public void SaveChanges()
         {
+        }
+
+        public bool HasUnsavedChanges()
+        {
+            return false;
         }
 
         public void RemoveCompany(Company company, Action<Exception> callback) { }

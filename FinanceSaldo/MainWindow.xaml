@@ -7,6 +7,8 @@
         xmlns:view="clr-namespace:FinanceSaldo.View"
         xmlns:viewModel="clr-namespace:FinanceSaldo.ViewModel"
         xmlns:dialogs="clr-namespace:SimpleDialogs;assembly=SimpleDialogs"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         dialogs:DialogManager.DefaultDialogContainer="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d ignore"
         Height="700"
@@ -14,6 +16,11 @@
         Title="BZSP Сальдо"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+        <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding DialogWindowCloseCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+        </i:Interaction.Triggers>
 
     <Window.Resources>
         <ResourceDictionary>

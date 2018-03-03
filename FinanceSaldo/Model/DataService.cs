@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace FinanceSaldo.Model
@@ -19,16 +21,20 @@ namespace FinanceSaldo.Model
             callback(new ObservableCollection<Company>(query), null);
         }
 
-        public void CreateCompany(Company company)
+        public void InsertOrUpdateCompany(Company company)
         {
-            _context.Company.Add(company);
+            _context.Entry(company).State = company.CompanyId == 0 ? EntityState.Added : EntityState.Modified;
             _context.SaveChanges();
         }
 
-        public void UpdateCompany(Company company)
+        public void SaveChanges()
         {
-            _context.Company.Attach(company);
             _context.SaveChanges();
+        }
+
+        public bool HasUnsavedChanges()
+        {
+            return _context.ChangeTracker.HasChanges();
         }
 
         public void RemoveCompany(Company company, Action<Exception> callback)

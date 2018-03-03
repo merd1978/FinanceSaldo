@@ -4,10 +4,11 @@ namespace FinanceSaldo.ViewModel
 {
     public abstract class TabViewModelBase : ViewModelBase
     {
+        private string _tabName;
         public string TabName
         {
-            get;
-            private set;
+            get => _tabName;
+            set => Set(ref _tabName, value);
         }
 
         protected TabViewModelBase(string tabName)
