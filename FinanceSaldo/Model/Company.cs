@@ -48,6 +48,12 @@ namespace FinanceSaldo.Model
             return (Saldo + Invoice.Where(d => d.Date.Date <= date.Date).Sum(o => (decimal?) o.Debit - o.Credit) ?? 0M);
         }
 
+        public decimal GetExpiredSaldo(DateTime date)
+        {
+            //return (Saldo + Invoice.Where(d => d.Date.Date.AddDays(d.ExpiryDays) < date.Date).Sum(o => (decimal?)o.Debit - o.Credit) ?? 0M);
+            return (Saldo + Invoice.Where(d => d.ExpiryDate.Date < date.Date).Sum(o => (decimal?)o.Debit - o.Credit) ?? 0M);
+        }
+
         public Company()
         {
             Invoice = new ObservableCollection<Invoice>();

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace FinanceSaldo.View
+namespace FinanceSaldo.View.Extensions
 {
     public class GrayoutImageBehavior
     {

@@ -38,7 +38,6 @@ namespace FinanceSaldo.Model
             {
                 Set(ref _debit, value);
                 Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
-                Messenger.Default.Send(new NotificationMessage("CurrentSaldoChanged"));
             }
         }
 
@@ -50,7 +49,6 @@ namespace FinanceSaldo.Model
             {
                 Set(ref _credit, value);
                 Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
-                Messenger.Default.Send(new NotificationMessage("CurrentSaldoChanged"));
             }
         }
 
