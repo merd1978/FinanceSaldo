@@ -46,7 +46,7 @@
                 </Button>
             </ToolBar>
             <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0" AlternationCount="2"
-                      ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedIndex}">
+                      ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedIndex}" Height="307" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
@@ -63,7 +63,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding TotalSaldo, UpdateSourceTrigger=PropertyChanged}" Width="70"/>
+                                        <TextBlock Text="{Binding TotalSaldo, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:n2\}}" Width="70" TextAlignment="Right"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                                 <GridViewColumn.Header>

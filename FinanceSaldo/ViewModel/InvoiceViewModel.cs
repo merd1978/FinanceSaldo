@@ -83,6 +83,7 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _invoiceExpiryDays, value);
                 SelectedInvoice.ExpiryDays = value;
                 RaisePropertyChanged(() => SelectedInvoice.ExpiryDays);
+                RaisePropertyChanged(nameof(ExpiredSaldo));
             }
         }
 
@@ -166,7 +167,7 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-        private DateTime _filterStartDate;
+        private DateTime _filterStartDate = DateTime.Now.Date;
         public DateTime FilterStartDate
         {
             get => _filterStartDate;
@@ -192,17 +193,19 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-        public double FilterDateDif
+        [Range(1, 999, ErrorMessage = "Срок должен быть от 1 до 999")]
+        public int FilterDateDif
         {
-            get => (FilterEndDate.Date - FilterStartDate.Date).TotalDays;
+            get => (int)(FilterEndDate.Date - FilterStartDate.Date).TotalDays;
             set
             {
+                if (value < 1 || value > 999) value = 0;
                 FilterStartDate = FilterEndDate.AddDays(-value);
                 RaisePropertyChanged(nameof(FilterStartDate));
             }
         }
 
-        private ObservableCollection<string> _filterDateDifList = new ObservableCollection<string>() { "10", "20", "30", "40" };
+        private ObservableCollection<string> _filterDateDifList = new ObservableCollection<string>() { "10", "20", "30", "40", "90" };
         public ObservableCollection<string> FilterDateDifList
         {
             get => _filterDateDifList;
@@ -318,8 +321,8 @@ namespace FinanceSaldo.ViewModel
                 }
                 // Creation of summary cells
                 row++;
-                workSheet.Cells[row++, "A"] = $"Просроченное сальдо на {FilterEndDate.Date.ToShortDateString()} {ExpiredSaldo}";
-                workSheet.Cells[row, "A"] = $"Сальдо на {FilterEndDate.Date.ToShortDateString()} {CurrentSaldo}";
+                workSheet.Cells[row++, "A"] = $"Просроченное сальдо (на {FilterEndDate.Date.ToShortDateString()}) = {ExpiredSaldo}";
+                workSheet.Cells[row, "A"] = $"Сальдо (на {FilterEndDate.Date.ToShortDateString()}) = {CurrentSaldo}";
 
                 // Apply some predefined styles for data to look nicely :)
                 workSheet.Range["A1"].AutoFormat();
@@ -365,7 +368,7 @@ namespace FinanceSaldo.ViewModel
             Company = company;
             Invoice = company.Invoice;
             InvoiceView = (CollectionView) CollectionViewSource.GetDefaultView(Invoice);
-            InvoiceView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            InvoiceView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
 
             InvoiceView.Filter = OnFilterInvoice;
             FilterDateDif = 30;

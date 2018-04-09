@@ -31,9 +31,6 @@
                                 <Style TargetType="DatePicker" >
                                     <Setter Property="Margin" Value="5 5 5 5" />
                                 </Style>
-                                <Style TargetType="ComboBox" >
-                                    <Setter Property="Margin" Value="5 5 5 5" />
-                                </Style>
                                 <Style TargetType="TextBlock" >
                                     <Setter Property="Margin" Value="5 5 5 5" />
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -77,7 +74,7 @@
                                      Text="{Binding InvoiceCredit, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:n2\}}"/>
                             <ComboBox Grid.Column="1" Grid.Row="4" IsEditable="True" ItemsSource="{Binding ExpiryDaysList, Mode=OneWay}"
                                       Text="{Binding InvoiceExpiryDays, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                      Style="{StaticResource ComboBoxInError}"/>
+                                      Style="{StaticResource ComboBoxInError}" Margin="5 5 5 5"/>
                             <TextBlock Grid.Column="1" Grid.Row="5"
                                        Text="{Binding SelectedInvoice.ExpiryDate, UpdateSourceTrigger=PropertyChanged, StringFormat=d}"/>
                         </Grid>
@@ -122,8 +119,9 @@
                         </DatePicker.Resources>
                     </DatePicker>
                         <TextBlock Text="За" Margin="5 0 5 0" VerticalAlignment="Center"></TextBlock>
-                    <ComboBox Text="{Binding FilterDateDif, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding FilterDateDifList, Mode=OneWay}"
-                              IsEditable="true" />
+                        <ComboBox Text="{Binding FilterDateDif, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                  ItemsSource="{Binding FilterDateDifList, Mode=OneWay}"
+                                  IsEditable="true" Style="{StaticResource ComboBoxInError}"/>
                     <TextBlock Text="дней" VerticalAlignment="Center"/>
                     </StackPanel>
                 </DockPanel>
@@ -163,7 +161,7 @@
                                     <Button Background="White" ToolTip="Удалить запись"
                                         Command="{Binding ElementName=DgInvoice, Path=DataContext.DialogDeleteCommand}">
                                         <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" MaxHeight="16">
-                                            <Path Fill="CornflowerBlue" Stretch="Uniform" Style="{StaticResource AppBarDelete}"/>
+                                            <Path Fill="CornflowerBlue" Stretch="Uniform" Style="{StaticResource AppBarDelete}" SnapsToDevicePixels="True"/>
                                         </ContentControl>
                                         <Button.Style>
                                             <Style x:Name="ButtonVisibility">

@@ -74,7 +74,6 @@
     </Style>
 
     <Style x:Key="ComboBoxInError" TargetType="ComboBox">
-        <Setter Property="Margin" Value="5 5 5 5" />
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -105,7 +104,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="Border" Background="Transparent">
-                            <Path x:Name="Path" Style="{TemplateBinding Tag}" Fill="{TemplateBinding Background}" Stretch="Uniform"/>
+                        <Path x:Name="Path" Style="{TemplateBinding Tag}" Fill="{TemplateBinding Background}" Stretch="Uniform"
+                              SnapsToDevicePixels="True"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
