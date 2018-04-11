@@ -37,7 +37,7 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _invoice, value);
         }
 
-        public CollectionView InvoiceView { get; }
+        public ICollectionViewLiveShaping InvoiceView { get; }
 
         private Invoice _selectedInvoice;
         public Invoice SelectedInvoice
@@ -69,7 +69,7 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 SelectedInvoice.Name = value;
-                InvoiceView.Refresh();
+                //InvoiceView.Refresh();
             }
         }
 
@@ -97,7 +97,7 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 SelectedInvoice.Date = value;
-                InvoiceView.Refresh();
+                //InvoiceView.Refresh();
                 RaisePropertyChanged(nameof(CurrentSaldo));
                 RaisePropertyChanged(nameof(ExpiredSaldo));
             }
@@ -163,7 +163,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterText, value);
                 ResetFilterTextCommand.RaiseCanExecuteChanged();
-                InvoiceView.Refresh();
+                //InvoiceView.Refresh();
             }
         }
 
@@ -175,7 +175,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterStartDate, value);
                 RaisePropertyChanged(nameof(FilterDateDif));
-                InvoiceView.Refresh();
+                //InvoiceView.Refresh();
             }
         }
 
@@ -189,7 +189,7 @@ namespace FinanceSaldo.ViewModel
                 RaisePropertyChanged(nameof(FilterDateDif));
                 RaisePropertyChanged(nameof(CurrentSaldo));
                 RaisePropertyChanged(nameof(ExpiredSaldo));
-                InvoiceView.Refresh();
+                //InvoiceView.Refresh();
             }
         }
 
@@ -307,7 +307,7 @@ namespace FinanceSaldo.ViewModel
 
                 // Populate sheet with some real data
                 int row = 3; // start row
-                foreach (Invoice invoice in InvoiceView)
+                foreach (Invoice invoice in (IEnumerable)InvoiceView)
                 {
                     workSheet.Cells[row, "A"] = invoice.Name;
                     workSheet.Cells[row, "B"] = invoice.Date.Date;
@@ -367,10 +367,12 @@ namespace FinanceSaldo.ViewModel
             _dataService = dataService;
             Company = company;
             Invoice = company.Invoice;
-            InvoiceView = (CollectionView) CollectionViewSource.GetDefaultView(Invoice);
-            InvoiceView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+            ICollectionViewLiveShaping InvoiceView = (ICollectionViewLiveShaping)CollectionViewSource.GetDefaultView(Invoice);
+            InvoiceView.IsLiveSorting = true;
+            //InvoiceView = (CollectionView) CollectionViewSource.GetDefaultView(Invoice);
+            //InvoiceView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
 
-            InvoiceView.Filter = OnFilterInvoice;
+            //InvoiceView.Filter = OnFilterInvoice;
             FilterDateDif = 30;
 
             NewCommand = new RelayCommand(ExecuteNewCommand);
