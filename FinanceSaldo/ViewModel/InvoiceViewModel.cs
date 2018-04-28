@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using FinanceSaldo.Model;
 using GalaSoft.MvvmLight.Command;
@@ -37,7 +36,7 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _invoice, value);
         }
 
-        public ICollectionViewLiveShaping InvoiceView { get; }
+        public ICollectionView InvoiceView { get; private set; }
 
         private Invoice _selectedInvoice;
         public Invoice SelectedInvoice
@@ -66,11 +65,7 @@ namespace FinanceSaldo.ViewModel
                 if (SelectedInvoice != null) return SelectedInvoice.Name;
                 return string.Empty;
             }
-            set
-            {
-                SelectedInvoice.Name = value;
-                //InvoiceView.Refresh();
-            }
+            set => SelectedInvoice.Name = value;
         }
 
         private int _invoiceExpiryDays;
@@ -97,7 +92,6 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 SelectedInvoice.Date = value;
-                //InvoiceView.Refresh();
                 RaisePropertyChanged(nameof(CurrentSaldo));
                 RaisePropertyChanged(nameof(ExpiredSaldo));
             }
@@ -163,7 +157,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterText, value);
                 ResetFilterTextCommand.RaiseCanExecuteChanged();
-                //InvoiceView.Refresh();
+                InvoiceView.Refresh();
             }
         }
 
@@ -175,7 +169,7 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterStartDate, value);
                 RaisePropertyChanged(nameof(FilterDateDif));
-                //InvoiceView.Refresh();
+                InvoiceView.Refresh();
             }
         }
 
@@ -189,7 +183,7 @@ namespace FinanceSaldo.ViewModel
                 RaisePropertyChanged(nameof(FilterDateDif));
                 RaisePropertyChanged(nameof(CurrentSaldo));
                 RaisePropertyChanged(nameof(ExpiredSaldo));
-                //InvoiceView.Refresh();
+                InvoiceView.Refresh();
             }
         }
 
@@ -367,12 +361,22 @@ namespace FinanceSaldo.ViewModel
             _dataService = dataService;
             Company = company;
             Invoice = company.Invoice;
-            ICollectionViewLiveShaping InvoiceView = (ICollectionViewLiveShaping)CollectionViewSource.GetDefaultView(Invoice);
-            InvoiceView.IsLiveSorting = true;
-            //InvoiceView = (CollectionView) CollectionViewSource.GetDefaultView(Invoice);
-            //InvoiceView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
 
-            //InvoiceView.Filter = OnFilterInvoice;
+            InvoiceView = CollectionViewSource.GetDefaultView(Invoice);
+            InvoiceView.Filter = OnFilterInvoice;
+            InvoiceView.SortDescriptions.Add(new SortDescription(nameof(Model.Invoice.Date), ListSortDirection.Ascending));
+            if (InvoiceView is ICollectionViewLiveShaping invoiLiveShaping && invoiLiveShaping.CanChangeLiveFiltering)
+            {
+                invoiLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Name));
+                invoiLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Date));
+                invoiLiveShaping.IsLiveFiltering = true;
+                if (invoiLiveShaping.CanChangeLiveSorting)
+                {
+                    invoiLiveShaping.LiveSortingProperties.Add(nameof(Model.Invoice.Date));
+                    invoiLiveShaping.IsLiveSorting = true;
+                }
+            }
+
             FilterDateDif = 30;
 
             NewCommand = new RelayCommand(ExecuteNewCommand);

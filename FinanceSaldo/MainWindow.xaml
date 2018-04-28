@@ -9,6 +9,7 @@
         xmlns:dialogs="clr-namespace:SimpleDialogs;assembly=SimpleDialogs"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:extensions="clr-namespace:FinanceSaldo.View.Extensions"
         dialogs:DialogManager.DefaultDialogContainer="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d ignore"
         Height="700"
@@ -46,8 +47,11 @@
             <MenuItem Header="_Помощь" Command="{Binding HelpCommand}"/>
         </Menu>
         <view:CompanyView Grid.Row="2" Grid.Column="0" />
+
         <TabControl Name="TabMain" Grid.Row="2" Grid.Column="1" Margin="5 5 5 5"
+            extensions:TabContent.IsCached="True"
             ItemsSource="{Binding TabCollection}" SelectedIndex="{Binding SelectedTabIndex}">
+
             <TabControl.ItemTemplate>
                 <!-- this is the header template-->
                 <DataTemplate>

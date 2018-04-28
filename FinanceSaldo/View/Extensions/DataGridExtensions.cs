@@ -18,6 +18,7 @@ namespace FinanceSaldo.View.Extensions
             {
                 grid.Dispatcher.InvokeAsync(() =>
                 {
+                    if (grid.SelectedItem == null) return;
                     grid.UpdateLayout();
                     grid.ScrollIntoView(grid.SelectedItem, null);
                 });

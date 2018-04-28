@@ -126,8 +126,9 @@
                     </StackPanel>
                 </DockPanel>
 
-                <DataGrid Grid.Row="1" x:Name="DgInvoice"  ItemsSource="{Binding InvoiceView}" SelectedItem="{Binding SelectedInvoice}" DockPanel.Dock="Left"
-                        AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
+                <DataGrid Grid.Row="1" x:Name="DgInvoice"
+                          ItemsSource="{Binding InvoiceView}" SelectedItem="{Binding SelectedInvoice}"
+                          DockPanel.Dock="Left" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
                     <i:Interaction.Behaviors>
                         <extensions:ScrollOnNewItemBehavior/>
                     </i:Interaction.Behaviors>
