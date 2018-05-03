@@ -64,22 +64,9 @@ namespace FinanceSaldo.Model
                     Set(ref _expiryDays, value);
                     RaisePropertyChanged(nameof(ExpiryDate));
                     RaisePropertyChanged(nameof(IsExpiry));
+                    RaisePropertyChanged(nameof(IsCash));
                 }
             }
-        }
-
-        private decimal _debitCash;
-        public decimal DebitCash
-        {
-            get => _debitCash;
-            set => Set(ref _debitCash, value);
-        }
-
-        private decimal _creditCash;
-        public decimal CreditCash
-        {
-            get => _creditCash;
-            set => Set(ref _creditCash, value);
         }
 
         [NotMapped]
@@ -87,6 +74,9 @@ namespace FinanceSaldo.Model
 
         [NotMapped]
         public bool IsExpiry => ExpiryDate < DateTime.Now;
+
+        [NotMapped]
+        public bool IsCash => ExpiryDays == 0;
 
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; }

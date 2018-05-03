@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows.Navigation;
 using FinanceSaldo.Model;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -121,6 +122,6 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-        public string Error => throw new NotImplementedException();
+        public string Error => null;
     }
 }

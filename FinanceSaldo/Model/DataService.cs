@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace FinanceSaldo.Model
@@ -9,6 +8,7 @@ namespace FinanceSaldo.Model
     public class DataService : IDataService
     {
         readonly DataEntity _context;
+
         public DataService()
         {
             AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));

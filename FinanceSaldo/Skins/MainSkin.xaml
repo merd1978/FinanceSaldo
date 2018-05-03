@@ -188,6 +188,9 @@
             <DataTrigger Binding="{Binding IsExpiry}" Value="false">
                 <Setter Property="Background" Value="Honeydew" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding IsCash}" Value="true">
+                <Setter Property="Background" Value="Bisque" />
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 

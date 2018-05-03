@@ -18,7 +18,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace FinanceSaldo.ViewModel
 {
-    public class InvoiceViewModel : TabViewModelBase, IDataErrorInfo
+    public sealed class InvoiceViewModel : TabViewModelBase, IDataErrorInfo
     {
         private readonly IDataService _dataService;
 
@@ -141,7 +141,7 @@ namespace FinanceSaldo.ViewModel
             set => Set(ref _expiredSaldo, value);
         }
 
-        private ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "40", "30" };
+        private ObservableCollection<string> _expiryDaysList = new ObservableCollection<string>() { "0", "30", "40" };
         public ObservableCollection<string> ExpiryDaysList
         {
             get => _expiryDaysList;
@@ -296,8 +296,6 @@ namespace FinanceSaldo.ViewModel
                 workSheet.Cells[2, "D"] = "Дата погашения";
                 workSheet.Cells[2, "E"] = "Дебит";
                 workSheet.Cells[2, "F"] = "Кредит";
-                workSheet.Cells[2, "G"] = "Дебит наличные";
-                workSheet.Cells[2, "H"] = "Кредит наличные";
 
                 // Populate sheet with some real data
                 int row = 3; // start row
@@ -309,8 +307,6 @@ namespace FinanceSaldo.ViewModel
                     workSheet.Cells[row, "D"] = invoice.ExpiryDate.Date;
                     workSheet.Cells[row, "E"] = invoice.Debit;
                     workSheet.Cells[row, "F"] = invoice.Credit;
-                    workSheet.Cells[row, "G"] = invoice.DebitCash;
-                    workSheet.Cells[row, "H"] = invoice.CreditCash;
                     row++;
                 }
                 // Creation of summary cells
@@ -364,16 +360,20 @@ namespace FinanceSaldo.ViewModel
 
             InvoiceView = CollectionViewSource.GetDefaultView(Invoice);
             InvoiceView.Filter = OnFilterInvoice;
+
             InvoiceView.SortDescriptions.Add(new SortDescription(nameof(Model.Invoice.Date), ListSortDirection.Ascending));
-            if (InvoiceView is ICollectionViewLiveShaping invoiLiveShaping && invoiLiveShaping.CanChangeLiveFiltering)
+
+            if (InvoiceView is ListCollectionView invoiceListView) invoiceListView.CustomSort = new CustomerSorter();
+
+            if (InvoiceView is ICollectionViewLiveShaping invoiceLiveShaping && invoiceLiveShaping.CanChangeLiveFiltering)
             {
-                invoiLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Name));
-                invoiLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Date));
-                invoiLiveShaping.IsLiveFiltering = true;
-                if (invoiLiveShaping.CanChangeLiveSorting)
+                invoiceLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Name));
+                invoiceLiveShaping.LiveFilteringProperties.Add(nameof(Model.Invoice.Date));
+                invoiceLiveShaping.IsLiveFiltering = true;
+                if (invoiceLiveShaping.CanChangeLiveSorting)
                 {
-                    invoiLiveShaping.LiveSortingProperties.Add(nameof(Model.Invoice.Date));
-                    invoiLiveShaping.IsLiveSorting = true;
+                    invoiceLiveShaping.LiveSortingProperties.Add(nameof(Model.Invoice.Date));
+                    invoiceLiveShaping.IsLiveSorting = true;
                 }
             }
 
@@ -426,7 +426,7 @@ namespace FinanceSaldo.ViewModel
             }
         }
 
-        public string Error => throw new NotImplementedException();
+        public string Error => null;
 
         public class CustomerSorter : IComparer
         {
