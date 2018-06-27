@@ -1,8 +1,12 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -20,6 +24,25 @@ namespace FinanceSaldo.ViewModel
         private readonly IDataService _dataService;
 
         #region Commands
+
+        public RelayCommand WindowLoadedCommand { get; set; }
+        private void ExecuteWindowLoadedCommand()
+        {
+            //DialogManager.ShowDialog(new ProgressDialog()
+            //{
+            //    CanCancel = false,
+            //    IsUndefined = true,
+            //    Message = $"Ждите....",
+            //    Title = "Загрузка данных",
+            //});
+
+            //var task = GetStudent();
+            //task.Wait();
+            //var result = task.Result;
+
+            GetCompany();
+        }
+
         public RelayCommand EditCompanyCommand { get; set; }
         private bool CanExecuteEditCompanyCommand()
         {
@@ -185,6 +208,7 @@ namespace FinanceSaldo.ViewModel
                 if (TabCollection[value] is InvoiceViewModel invoiceViewModel)
                 {
                     SelectedIndex = Company.IndexOf(invoiceViewModel.Company);
+                    invoiceViewModel.SelectedInvoice = invoiceViewModel.SelectedInvoice;
                 }
                 else
                 {
@@ -201,8 +225,7 @@ namespace FinanceSaldo.ViewModel
             System.Threading.Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
 
             _dataService = dataService;
-            GetCompany();
-
+            
             EditCompanyCommand = new RelayCommand(ExecuteEditCompanyCommand, CanExecuteEditCompanyCommand);
             NewCompanyCommand = new RelayCommand(ExecuteNewCompanyCommand);
             HelpCommand = new RelayCommand(ExecuteHelpCommand);
@@ -212,6 +235,7 @@ namespace FinanceSaldo.ViewModel
             OpenCompanyTabCommand = new RelayCommand(ExecuteOpenCompanyTabCommand);
             DialogWindowCloseCommand = new RelayCommand<CancelEventArgs>(ExecuteDialogWindowCloseCommand);
             WindowCloseCommand = new RelayCommand<DialogResult>(ExecuteWindowCloseCommand);
+            WindowLoadedCommand = new RelayCommand(ExecuteWindowLoadedCommand);
 
             Messenger.Default.Register<NotificationMessage>(this, NotifyMe);
             Messenger.Default.Register<Company>(this, AddCompany);
@@ -248,6 +272,29 @@ namespace FinanceSaldo.ViewModel
                 }
                 Company = items;
             });
+        }
+
+        public void GetCompanyAsync()
+        {
+            //var task = _dataService.GetCompanyAsync();
+            //task.Wait();
+            //Company = new ObservableCollection<Company>(task.Result);
+
+            var task = GetStudent();
+            task.Wait();
+            var result = task.Result;
+        }
+
+        private static async Task<Company> GetStudent()
+        {
+            Company company = null;
+
+            using (var context = new DataEntity())
+            {
+                company = await (context.Company.Where(s => s.CompanyId == 1).FirstOrDefaultAsync());
+            }
+
+            return company;
         }
 
         public void RemoveCompany(Company company)

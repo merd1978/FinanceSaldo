@@ -12,7 +12,7 @@
         public string Bottom => "Дата разработки 2018г. Разработано отделом ОАСУП \"ОАО БЗСП.\"";
 
         public HelpViewModel() : base("Помощь")
-        {
+        { 
         }
     }
 }

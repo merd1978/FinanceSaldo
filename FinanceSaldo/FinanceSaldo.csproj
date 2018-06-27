@@ -187,8 +187,11 @@
       <DependentUpon>CompanyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Extensions\DataGridExtensions.cs" />
+    <Compile Include="View\Extensions\DateConverter.cs" />
     <Compile Include="View\Extensions\GrayoutImageBehavior.cs" />
+    <Compile Include="View\Extensions\DecimalConverter.cs" />
     <Compile Include="View\Extensions\TabContent.cs" />
+    <Compile Include="View\Extensions\TextBoxInputBehavior.cs" />
     <Compile Include="View\HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>

@@ -18,9 +18,12 @@
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
         <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <command:EventToCommand Command="{Binding DialogWindowCloseCommand}" PassEventArgsToCommand="True"/>
-        </i:EventTrigger>
+            <i:EventTrigger EventName="Closing">
+                <command:EventToCommand Command="{Binding DialogWindowCloseCommand}" PassEventArgsToCommand="True"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="ContentRendered">
+                <command:EventToCommand Command="{Binding WindowLoadedCommand}"/>
+            </i:EventTrigger>
         </i:Interaction.Triggers>
 
     <Window.Resources>
@@ -77,5 +80,6 @@
                 </DataTemplate>
             </TabControl.Resources>
         </TabControl>
+        <!--<ProgressBar x:Name="ProgressUpload" Grid.Row="3" Margin="5" IsIndeterminate="True" />-->
     </Grid>
 </Window>

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using FinanceSaldo.Model;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using FinanceSaldo.ViewModel;
 
 namespace FinanceSaldo.Design
@@ -22,6 +25,23 @@ namespace FinanceSaldo.Design
             }
             callback(designCompany, null);
         }
+
+        public async Task<List<Company>> GetCompanyAsync()
+        {
+            var designCompany = new List<Company>();
+            for (int index = 0; index < 15; index++)
+            {
+                var company = new Company
+                {
+                    Name = "Name" + index,
+                    Description = "Description" + index,
+                    Saldo = 1200.55m
+                };
+                designCompany.Add(company);
+            }
+            return designCompany;
+        }
+
 
         public void InsertOrUpdateCompany(Company company)
         {

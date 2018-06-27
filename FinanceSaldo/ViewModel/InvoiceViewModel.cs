@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using FinanceSaldo.Model;
+using FinanceSaldo.View.Extensions;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using SimpleDialogs;
@@ -47,7 +50,6 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _selectedInvoice, value);
                 IsInvoiceEditorEnabled = value != null;
                 RaisePropertyChanged(nameof(InvoiceName));
-                RaisePropertyChanged(nameof(InvoiceDate));
                 RaisePropertyChanged(nameof(InvoiceDebit));
                 RaisePropertyChanged(nameof(InvoiceCredit));
                 if (value != null)
@@ -55,6 +57,8 @@ namespace FinanceSaldo.ViewModel
                     _invoiceExpiryDays = SelectedInvoice.ExpiryDays;
                     RaisePropertyChanged(nameof(InvoiceExpiryDays));
                 }
+
+                InvoiceDate = value?.Date ?? DateTime.Now;
             }
         }
 
@@ -78,22 +82,21 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _invoiceExpiryDays, value);
                 SelectedInvoice.ExpiryDays = value;
                 RaisePropertyChanged(() => SelectedInvoice.ExpiryDays);
-                RaisePropertyChanged(nameof(ExpiredSaldo));
+                TotalSumChanged();
+                TotalSaldoChanged();
             }
         }
 
+        private DateTime _invoiceDate;
         public DateTime InvoiceDate
         {
-            get
-            {
-                if (SelectedInvoice != null) return SelectedInvoice.Date;
-                return DateTime.Now;
-            }
+            get => SelectedInvoice != null ? _invoiceDate : DateTime.Now;
             set
             {
+                Set(ref _invoiceDate, value);
+                if (value < FilterStartDate.Date || value > FilterEndDate) return;
                 SelectedInvoice.Date = value;
-                RaisePropertyChanged(nameof(CurrentSaldo));
-                RaisePropertyChanged(nameof(ExpiredSaldo));
+                TotalSaldoChanged();
             }
         }
 
@@ -107,8 +110,8 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 SelectedInvoice.Debit = value;
-                RaisePropertyChanged(nameof(CurrentSaldo));
-                RaisePropertyChanged(nameof(ExpiredSaldo));
+                TotalSumChanged();
+                TotalSaldoChanged();
             }
         }
 
@@ -122,8 +125,64 @@ namespace FinanceSaldo.ViewModel
             set
             {
                 SelectedInvoice.Credit = value;
-                RaisePropertyChanged(nameof(CurrentSaldo));
-                RaisePropertyChanged(nameof(ExpiredSaldo));
+                TotalSumChanged();
+                TotalSaldoChanged();
+            }
+        }
+
+        // Summ of filtered Debit (ExpiryDays != 0)
+        public decimal TotalDebit
+        {
+            get
+            {
+                decimal sum = 0;
+                foreach (Invoice inv in InvoiceView)
+                {
+                    if (inv.ExpiryDays != 0) sum += inv.Debit;
+                }
+                return sum;
+            }
+        }
+
+        // Summ of filtered Debit for Cash (ExpiryDays == 0)
+        public decimal TotalCashDebit
+        {
+            get
+            {
+                decimal sum = 0;
+                foreach (Invoice inv in InvoiceView)
+                {
+                    if (inv.ExpiryDays == 0) sum += inv.Debit;
+                }
+                return sum;
+            }
+        }
+
+        // Summ of filtered Debit (ExpiryDays != 0)
+        public decimal TotalCredit
+        {
+            get
+            {
+                decimal sum = 0;
+                foreach (Invoice inv in InvoiceView)
+                {
+                    if (inv.ExpiryDays != 0) sum += inv.Credit;
+                }
+                return sum;
+            }
+        }
+
+        // Summ of filtered Debit for Cash (ExpiryDays == 0)
+        public decimal TotalCashCredit
+        {
+            get
+            {
+                decimal sum = 0;
+                foreach (Invoice inv in InvoiceView)
+                {
+                    if (inv.ExpiryDays == 0) sum += inv.Credit;
+                }
+                return sum;
             }
         }
 
@@ -158,6 +217,7 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _filterText, value);
                 ResetFilterTextCommand.RaiseCanExecuteChanged();
                 InvoiceView.Refresh();
+                TotalSumChanged();
             }
         }
 
@@ -170,6 +230,7 @@ namespace FinanceSaldo.ViewModel
                 Set(ref _filterStartDate, value);
                 RaisePropertyChanged(nameof(FilterDateDif));
                 InvoiceView.Refresh();
+                TotalSumChanged();
             }
         }
 
@@ -181,21 +242,22 @@ namespace FinanceSaldo.ViewModel
             {
                 Set(ref _filterEndDate, value);
                 RaisePropertyChanged(nameof(FilterDateDif));
-                RaisePropertyChanged(nameof(CurrentSaldo));
-                RaisePropertyChanged(nameof(ExpiredSaldo));
                 InvoiceView.Refresh();
+                TotalSaldoChanged();
+                TotalSumChanged();
             }
         }
 
         [Range(1, 999, ErrorMessage = "Срок должен быть от 1 до 999")]
         public int FilterDateDif
         {
-            get => (int)(FilterEndDate.Date - FilterStartDate.Date).TotalDays;
+            get => (int)(FilterEndDate.Date - FilterStartDate.Date).TotalDays + 1;
             set
             {
                 if (value < 1 || value > 999) value = 0;
-                FilterStartDate = FilterEndDate.AddDays(-value);
+                FilterStartDate = FilterEndDate.AddDays(-(value - 1));
                 RaisePropertyChanged(nameof(FilterStartDate));
+                TotalSumChanged();
             }
         }
 
@@ -215,7 +277,7 @@ namespace FinanceSaldo.ViewModel
             if (invoice.Name == null) return false;
             return invoice.Name.Contains(FilterText);
         }
-        #endregion
+        #endregion Filter
 
         #region Commands
         public RelayCommand NewCommand { get; set; }
@@ -237,6 +299,14 @@ namespace FinanceSaldo.ViewModel
         private void ExecuteSaveCommand()
         {
             _dataService.SaveChanges();
+        }
+
+        public RelayCommand<DatePickerDateValidationErrorEventArgs> DatePickerConverterCommand { get; set; }
+        private void ExecuteDatePickerConverterCommand(DatePickerDateValidationErrorEventArgs e)
+        {
+            var converter = new DateConverter();
+            if (converter.ConvertBack(e.Text, typeof(DateTime?), null, CultureInfo.CurrentCulture) is DateTime value)
+                InvoiceDate = value;
         }
 
         public RelayCommand DialogDeleteCommand { get; set; }
@@ -379,8 +449,14 @@ namespace FinanceSaldo.ViewModel
 
             FilterDateDif = 30;
 
+            foreach (var invoice in Invoice)
+            {
+                invoice.InvoiceSaldoChanged += InvoiceSaldoChanged;
+            }
+
             NewCommand = new RelayCommand(ExecuteNewCommand);
             SaveCommand = new RelayCommand(ExecuteSaveCommand);
+            DatePickerConverterCommand = new RelayCommand<DatePickerDateValidationErrorEventArgs>(ExecuteDatePickerConverterCommand);
             DialogDeleteCommand = new RelayCommand(ExecuteDialogDeleteCommand);
             DeleteCommand = new RelayCommand<DialogResult>(ExecuteDeleteCommand);
             CloseTabCommand = new RelayCommand(ExecuteCloseTabCommand);
@@ -395,22 +471,41 @@ namespace FinanceSaldo.ViewModel
             string notification = notificationMessage.Notification;
             switch (notification)
             {
-                case "CurrentSaldoChanged":
+                case "BaseSaldoChanged":
                     RaisePropertyChanged(nameof(CurrentSaldo));
                     break;
             }
+        }
+
+        private void TotalSumChanged()
+        {
+            RaisePropertyChanged(nameof(TotalDebit));
+            RaisePropertyChanged(nameof(TotalCredit));
+            RaisePropertyChanged(nameof(TotalCashDebit));
+            RaisePropertyChanged(nameof(TotalCashCredit));
+        }
+
+        private void TotalSaldoChanged()
+        {
+            RaisePropertyChanged(nameof(CurrentSaldo));
+            RaisePropertyChanged(nameof(ExpiredSaldo));
+        }
+
+        private void InvoiceSaldoChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
         }
 
         public string this[string columnName]
         {
             get
             {
-                //string result = string.Empty;
-                //switch (columnName)
-                //{
-                //    case "Name": if (string.IsNullOrEmpty(Company.Name)) result = "Name is required!"; break;
-                //};
-                //return result;
+                 switch (columnName)
+                 {
+                    case "InvoiceDate":
+                        if (InvoiceDate.Date < FilterStartDate.Date || InvoiceDate.Date > FilterEndDate) return "Date is out of filter range!";
+                        return string.Empty;
+                };
 
                 var value = GetType().GetProperty(columnName)?.GetValue(this, null);
                 var results = new List<ValidationResult>();

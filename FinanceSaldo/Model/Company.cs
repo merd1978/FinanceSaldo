@@ -28,7 +28,7 @@ namespace FinanceSaldo.Model
             {
                 Set(ref _saldo, value);
                 RaisePropertyChanged(nameof(TotalSaldo));
-                Messenger.Default.Send(new NotificationMessage("CurrentSaldoChanged"));
+                Messenger.Default.Send(new NotificationMessage("BaseSaldoChanged"));
             }
         }
 

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FinanceSaldo.Model
 {
@@ -11,7 +13,6 @@ namespace FinanceSaldo.Model
 
         public DataService()
         {
-            AppDomain.CurrentDomain.SetData("DataDirectory", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
             _context = new DataEntity();
             _context.Database.CreateIfNotExists();
         }
@@ -19,6 +20,17 @@ namespace FinanceSaldo.Model
         {
             var query = _context.Company;
             callback(new ObservableCollection<Company>(query), null);
+        }
+
+        public async Task<List<Company>> GetCompanyAsync()
+        {
+            using (var context = new DataEntity())
+            {
+
+                var query = context.Company;
+
+                return await query.ToListAsync();
+            }
         }
 
         public void InsertOrUpdateCompany(Company company)

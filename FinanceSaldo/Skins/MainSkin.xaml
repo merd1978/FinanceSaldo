@@ -4,6 +4,10 @@
     <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Lavender" />
     <SolidColorBrush x:Key="DisabledIconBrush" Color="LightGray" />
 
+    <SolidColorBrush x:Key="ExpiryBrush" Color="Honeydew" />
+    <SolidColorBrush x:Key="CashBrush" Color="Bisque" />
+    
+ 
     <Style x:Key="AppBarClean" TargetType="Path">
         <Setter Property="Data" Value="F1 M 58.5833,45.9167L 58.5833,57L 19,57L 19,45.9167L 28.8998,45.9167C 31.0306,47.2793 33.6795,
                 48.4476 36.6434,49.2418C 40.3467,50.2341 44.7079,50.4746 47.6249,50.0692L 47.6249,45.9167L 58.5833,45.9167 Z M 56.2083,
@@ -52,6 +56,7 @@
     </Style>
 
     <Style x:Key="TextBoxInError" TargetType="TextBox">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -186,10 +191,10 @@
         </Style.Resources>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsExpiry}" Value="false">
-                <Setter Property="Background" Value="Honeydew" />
+                <Setter Property="Background" Value="{StaticResource ExpiryBrush}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsCash}" Value="true">
-                <Setter Property="Background" Value="Bisque" />
+                <Setter Property="Background" Value="{StaticResource CashBrush}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

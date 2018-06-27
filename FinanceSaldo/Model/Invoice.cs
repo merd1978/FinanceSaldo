@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GalaSoft.MvvmLight.Messaging;
@@ -8,6 +9,12 @@ namespace FinanceSaldo.Model
 {
     public class Invoice : ObservableObject
     {
+        public event PropertyChangedEventHandler InvoiceSaldoChanged;
+        private void PropertyChangedEvent(string property)
+        {
+            InvoiceSaldoChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
         public int InvoiceId { get; set; }
 
         private string _name;
@@ -37,7 +44,7 @@ namespace FinanceSaldo.Model
             set
             {
                 Set(ref _debit, value);
-                Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+                PropertyChangedEvent(nameof(Debit));
             }
         }
 
@@ -48,7 +55,7 @@ namespace FinanceSaldo.Model
             set
             {
                 Set(ref _credit, value);
-                Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
+                PropertyChangedEvent(nameof(Credit));
             }
         }
 
@@ -83,7 +90,7 @@ namespace FinanceSaldo.Model
 
         public Invoice()
         {
-            _expiryDays = 40;
+            _expiryDays = 30;
             _date = DateTime.Now;
         }
     }

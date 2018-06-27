@@ -47,23 +47,28 @@
             </ToolBar>
             <ListView x:Name="LvCompany" Grid.Row="1" HorizontalContentAlignment="Stretch" BorderThickness="0" AlternationCount="2"
                       ItemsSource="{Binding Company}" SelectedItem="{Binding SelectedItem}" SelectedIndex="{Binding SelectedIndex}" Height="307" VerticalAlignment="Top">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"></TextBlock>
+                                        <TextBlock Text="{Binding Name}" MaxWidth="270"></TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                                 <GridViewColumn.Header>
-                                    <TextBlock Text="Наименование" Width="140"></TextBlock>
+                                    <TextBlock Text="Наименование"></TextBlock>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding TotalSaldo, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:n2\}}" Width="70" TextAlignment="Right"/>
+                                        <TextBlock Text="{Binding TotalSaldo, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:n2\}}" MinWidth="70" TextAlignment="Right"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                                 <GridViewColumn.Header>
