@@ -7,7 +7,7 @@ namespace FinanceSaldo.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
             ContextKey = "FinanceSaldo.Model.DataEntity";
         }
 

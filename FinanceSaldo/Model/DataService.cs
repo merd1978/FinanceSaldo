@@ -14,7 +14,7 @@ namespace FinanceSaldo.Model
         public DataService()
         {
             _context = new DataEntity();
-            _context.Database.CreateIfNotExists();
+            //_context.Database.CreateIfNotExists();
         }
         public void GetCompany(Action<ObservableCollection<Company>, Exception> callback)
         {

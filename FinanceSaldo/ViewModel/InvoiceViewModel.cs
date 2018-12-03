@@ -285,6 +285,7 @@ namespace FinanceSaldo.ViewModel
         {
             var newInvoice = new Invoice();
             Invoice.Add(newInvoice);
+            newInvoice.InvoiceSaldoChanged += InvoiceSaldoChanged;
             SelectedInvoice = newInvoice;
         }
 
@@ -330,6 +331,7 @@ namespace FinanceSaldo.ViewModel
         {
             DialogManager.HideVisibleDialog();
             if (result != DialogResult.Yes) return;
+            SelectedInvoice.InvoiceSaldoChanged -= InvoiceSaldoChanged;
             _dataService.RemoveInvoice(SelectedInvoice);
             Invoice.Remove(SelectedInvoice);
             Messenger.Default.Send(new NotificationMessage("TotalSaldoChanged"));
